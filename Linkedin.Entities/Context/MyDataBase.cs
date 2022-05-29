@@ -1,43 +1,52 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System; 
 using System.Linq;
-using Student.Models;
+using System.Threading.Tasks;
+
+using Linkedin.Models;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Student.Data.Context
 {
-    
+
     public class MyDataBase : DbContext
     {
-        // Your context has been configured to use a 'MyDataBase' connection string from your application's 
-        // configuration file (App.config or Web.config). By default, this connection string targets the 
-        // 'Student.Models.MyDataBase' database on your LocalDb instance. 
-        // 
-        // If you wish to target a different database and/or database provider, modify the 'MyDataBase' 
-        // connection string in the application configuration file.
-        public MyDataBase()
-
-        : base(@"Data Source=localhost\SQLEXPRESS;Initial Catalog=Students;Integrated Security=True")
-        {
+      
+        public MyDataBase(DbContextOptions<MyDataBase> options, bool testMode) : base(options)
+        { 
         }
-
-        // Add a DbSet for each entity type that you want to include in your model. For more information 
-        // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
-
-        public DbSet<STStudent> STStudents { get; set; }
-        public DbSet<STStudentCourse> STStudentCourses { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<Request> Requests { get; set; }
+        public DbSet<Visit> Visits { get; set; }
         //
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-          
-           modelBuilder.Entity<STStudent>().ToTable("STStudent");
-            modelBuilder.Entity<STStudentCourse>().ToTable("STStudentCourse");
-
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<Activity>().ToTable("Activity");
+            modelBuilder.Entity<Schedule>().ToTable("Schedule");
+            modelBuilder.Entity<Request>().ToTable("Request");
+            modelBuilder.Entity<Visit>().ToTable("Visit");
+
+            //modelBuilder.Seed();
+
         }
 
-        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+          
+                //mkh
+                // optionsBuilder.UseSqlServer("Data Source=185.97.118.69,1433;Initial Catalog=HAFTAD_CF7;User Id=sa;Password=1qazZAQ!@WSX;MultipleActiveResultSets=True");
+                optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB; UID=sa; Password=ABCabc123456;Database=Linkdin;");
+           
+            //optionsBuilder  .UseSqlServer(_AppSetting.Value.ConnectionString, providerOptions => providerOptions.CommandTimeout(60));
+        } 
+
     }
 
-    
 }

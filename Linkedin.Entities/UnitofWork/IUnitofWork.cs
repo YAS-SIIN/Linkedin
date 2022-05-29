@@ -11,14 +11,7 @@ namespace Linkedin.Entities.UnitOfWork
     {
         IGenericRepository<T> GetRepository<T>() where T : class;
 
-        int SaveChanges(); 
-     
-        void BeginTransaction();
-
-        void Commit();
-
-        void Rollback();
-
-
+        void SaveChanges(); 
+        
     }
 }

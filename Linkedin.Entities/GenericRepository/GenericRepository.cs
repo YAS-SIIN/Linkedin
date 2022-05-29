@@ -1,7 +1,8 @@
-﻿using Student.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+
+using Student.Data.Context;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+using System.Collections.Generic; 
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
