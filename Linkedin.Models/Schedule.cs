@@ -19,10 +19,7 @@ namespace Linkedin.Models
         [Required]
         [StringLength(100)]
         public string Priority { get; set; }
-
-        [Required]
-        public Int16 Status { get; set; }
-
+ 
         [Required]
         [StringLength(100)]
         public string UserId { get; set; }

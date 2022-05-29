@@ -18,10 +18,7 @@ namespace Linkedin.Models
 
         [Required]
         public DateTime ExpireDateTime { get; set; }
-         
-        [Required]
-        public Int16 Status { get; set; }
-
+          
         [Required]
         [StringLength(100)]
         public string UserId { get; set; }

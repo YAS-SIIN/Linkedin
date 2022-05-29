@@ -17,10 +17,7 @@ namespace Linkedin.Models
 
         [Required]
         public DateTime CreateDateTime { get; set; }
-
-        [Required]
-        public Int16 Status { get; set; }
-
+         
         [Required]
         public DateTime LikeDateTime { get; set; }
 
