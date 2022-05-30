@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Linkedin.Service.UserService
 {
-  public class UserService
+  public class UserService:IUserService
     {
         private readonly UnitOfWork _uw;
         public UserService(UnitOfWork uw)

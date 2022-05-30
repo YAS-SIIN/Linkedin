@@ -1,13 +1,18 @@
+using Linkedin.Entities.Context;
+using Linkedin.Models;
+using Linkedin.Service.UserService;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-
+ 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +38,21 @@ namespace Linkedin.Web
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Linkedin.Web", Version = "v1" });
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithExposedHeaders("X-Pagination"));
+            });
+ 
+            services.AddDbContext<MyDataBase>(options => options.UseSqlServer(Configuration["ConnectionStrings:DatabaseConnection"]));
+
+
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

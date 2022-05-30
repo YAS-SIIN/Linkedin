@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Linkedin.Entities.GenericRepository;
-using Student.Data.Context; 
+using System.Threading.Tasks; 
+using Linkedin.Entities.Context;
+using Linkedin.Entities.GenericRepository; 
 namespace Linkedin.Entities.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
@@ -15,9 +15,9 @@ namespace Linkedin.Entities.UnitOfWork
         public UnitOfWork(MyDataBase context)
         {
 
-       //Database.SetInitializer<MyDataBase>(null);
-       //     if (context == null)
-       //         throw new ArgumentException("context is null!");
+            //Database.SetInitializer<MyDataBase>(null);
+            if (context == null)
+                throw new ArgumentException("context is null!");
             _context = context;
         }
 
