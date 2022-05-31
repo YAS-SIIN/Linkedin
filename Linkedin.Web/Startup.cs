@@ -1,6 +1,9 @@
 using Linkedin.Entities.Context;
 using Linkedin.Models;
+using Linkedin.Service.Request;
+using Linkedin.Service.Schedule;
 using Linkedin.Service.UserService;
+using Linkedin.Service.Visit;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,10 +52,13 @@ namespace Linkedin.Web
             });
  
             services.AddDbContext<MyDataBase>(options => options.UseSqlServer(Configuration["ConnectionStrings:DatabaseConnection"]));
-
-
+             
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddTransient<IRequestService, RequestService>();
+            services.AddTransient<IScheduleService, ScheduleService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IVisitService, VisitService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
