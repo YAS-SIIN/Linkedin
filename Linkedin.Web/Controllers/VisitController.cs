@@ -16,11 +16,11 @@ namespace Linkedin.Web.Controllers
     [ApiController]
     public class VisitController : ControllerBase
     {
-        private readonly ILogger<VisitController> _logger;
+        //private readonly ILogger<VisitController> _logger;
         private readonly IVisitService _visitservice;
-        public VisitController(ILogger<VisitController> logger, IVisitService visitservice)
+        public VisitController(IVisitService visitservice)
         {
-            _logger = logger;
+            //_logger = logger;
             _visitservice = visitservice;
         }
 

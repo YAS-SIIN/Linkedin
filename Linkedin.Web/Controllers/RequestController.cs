@@ -16,11 +16,11 @@ namespace Linkedin.Web.Controllers
     [ApiController]
     public class RequestController : ControllerBase
     {
-        private readonly ILogger<RequestController> _logger;
+        //private readonly ILogger<RequestController> _logger;
         private readonly IRequestService _requestService;
-        public RequestController(ILogger<RequestController> logger, IRequestService requestService)
+        public RequestController(IRequestService requestService)
         {
-            _logger = logger;
+            //_logger = logger;
             _requestService = requestService;
         }
 

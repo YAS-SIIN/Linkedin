@@ -21,7 +21,7 @@ namespace Linkedin.Service.Schedule
 
         public IQueryable<Models.Schedule> GetAll()
         {
-            return _uw.GetRepository<Models.Schedule>().GetAll();
+            return _uw.GetRepository< Linkedin.Models. Schedule >().GetAll();
         }
 
         public Models.Schedule GetById(int id)

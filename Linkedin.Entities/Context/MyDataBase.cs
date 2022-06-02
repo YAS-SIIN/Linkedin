@@ -22,7 +22,10 @@ namespace Linkedin.Entities.Context
         public DbSet<Request> Requests { get; set; }
         public DbSet<Visit> Visits { get; set; }
         //
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    base.OnModelCreating(modelBuilder);
@@ -36,7 +39,7 @@ namespace Linkedin.Entities.Context
         //    //modelBuilder.Seed();
 
         //}
- 
+
     }
 
 }

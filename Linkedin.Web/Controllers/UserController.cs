@@ -16,11 +16,11 @@ namespace Linkedin.Web.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ILogger<UserController> _logger;
+        //private readonly ILogger<UserController> _logger;
         private readonly IUserService _userservice;
-        public UserController(ILogger<UserController> logger, IUserService userservice)
+        public UserController(IUserService userservice)
         {
-            _logger = logger;
+            //_logger = logger;
             _userservice = userservice;
         }
 

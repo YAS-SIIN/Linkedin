@@ -16,11 +16,11 @@ namespace Linkedin.Web.Controllers
     [ApiController]
     public class ScheduleController : ControllerBase
     {
-        private readonly ILogger<ScheduleController> _logger;
+        //private readonly ILogger<ScheduleController> _logger;
         private readonly IScheduleService _scheduleservice;
-        public ScheduleController(ILogger<ScheduleController> logger, IScheduleService scheduleservice)
+        public ScheduleController( IScheduleService scheduleservice)
         {
-            _logger = logger;
+            //_logger = logger;
             _scheduleservice = scheduleservice;
         }
 

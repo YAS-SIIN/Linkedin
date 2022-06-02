@@ -1,4 +1,6 @@
 using Linkedin.Entities.Context;
+using Linkedin.Entities.GenericRepository;
+using Linkedin.Entities.UnitOfWork;
 using Linkedin.Models;
 using Linkedin.Service.Request;
 using Linkedin.Service.Schedule;
@@ -50,14 +52,24 @@ namespace Linkedin.Web
                         .AllowAnyHeader()
                         .WithExposedHeaders("X-Pagination"));
             });
- 
+
             services.AddDbContext<MyDataBase>(options => options.UseSqlServer(Configuration["ConnectionStrings:DatabaseConnection"]));
-             
+
+            //services.AddTransient<ISettingsService, SettingsService>();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddTransient<IRequestService, RequestService>();
-            services.AddTransient<IScheduleService, ScheduleService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IVisitService, VisitService>();
+          
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+            services.AddScoped<IGenericRepository<Request>, GenericRepository<Request>>();
+            services.AddScoped<IGenericRepository<Schedule>, GenericRepository<Schedule>>();
+            services.AddScoped<IGenericRepository<Visit>, GenericRepository<Visit>>();
+
+            services.AddScoped<IScheduleService, ScheduleService>();
+            services.AddScoped<IRequestService, RequestService>(); 
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IVisitService, VisitService>();
 
         }
 

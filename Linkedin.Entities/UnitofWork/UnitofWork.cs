@@ -33,7 +33,7 @@ namespace Linkedin.Entities.UnitOfWork
             {
                 _context.SaveChanges();
             }
-            catch (Exception dbEx)
+            catch  
             {  
             } 
         }
