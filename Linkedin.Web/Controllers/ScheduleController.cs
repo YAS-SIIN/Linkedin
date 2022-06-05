@@ -30,6 +30,12 @@ namespace Linkedin.Web.Controllers
             return _scheduleservice.GetAll();
         }
 
+        [HttpGet]
+        public IEnumerable<Schedule> NextVisit()
+        {
+            return _scheduleservice.GetAll();
+        }
+
         [HttpPost]
         public Schedule Post([FromBody] Schedule Schedule)
         {
