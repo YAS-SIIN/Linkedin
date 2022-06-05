@@ -2,6 +2,7 @@ using Linkedin.Entities.Context;
 using Linkedin.Entities.GenericRepository;
 using Linkedin.Entities.UnitOfWork;
 using Linkedin.Models;
+using Linkedin.Service.Activity;
 using Linkedin.Service.Request;
 using Linkedin.Service.Schedule;
 using Linkedin.Service.UserService;
@@ -61,11 +62,13 @@ namespace Linkedin.Web
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddScoped<IGenericRepository<Activity>, GenericRepository<Activity>>();
             services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
             services.AddScoped<IGenericRepository<Request>, GenericRepository<Request>>();
             services.AddScoped<IGenericRepository<Schedule>, GenericRepository<Schedule>>();
             services.AddScoped<IGenericRepository<Visit>, GenericRepository<Visit>>();
 
+            services.AddTransient<IActivityService, ActivityService>();
             services.AddTransient<IScheduleService, ScheduleService>();
             services.AddScoped<IRequestService, RequestService>();
             services.AddScoped<IUserService, UserService>();
