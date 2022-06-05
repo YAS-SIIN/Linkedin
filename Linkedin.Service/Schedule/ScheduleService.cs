@@ -12,13 +12,12 @@ namespace Linkedin.Service.Schedule
 {
   
     public class ScheduleService : IScheduleService
-    {
-        private readonly UnitOfWork _uw;
-        public ScheduleService(UnitOfWork uw)
+    { 
+        private readonly IUnitOfWork _uw;
+        public ScheduleService(IUnitOfWork uw)
         {
             _uw = uw;
         }
-
         public IQueryable<Models.Schedule> GetAll()
         {
             return _uw.GetRepository< Linkedin.Models. Schedule >().GetAll();

@@ -52,11 +52,11 @@ namespace Linkedin.Web
                         .AllowAnyHeader()
                         .WithExposedHeaders("X-Pagination"));
             });
-
+             
             services.AddDbContext<MyDataBase>(options => options.UseSqlServer(Configuration["ConnectionStrings:DatabaseConnection"]));
 
             //services.AddTransient<ISettingsService, SettingsService>();
-            services.AddSingleton<IConfiguration>(Configuration);
+            //services.AddSingleton<IConfiguration>(Configuration);
           
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -66,10 +66,11 @@ namespace Linkedin.Web
             services.AddScoped<IGenericRepository<Schedule>, GenericRepository<Schedule>>();
             services.AddScoped<IGenericRepository<Visit>, GenericRepository<Visit>>();
 
-            services.AddScoped<IScheduleService, ScheduleService>();
-            services.AddScoped<IRequestService, RequestService>(); 
+            services.AddTransient<IScheduleService, ScheduleService>();
+            services.AddScoped<IRequestService, RequestService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IVisitService, VisitService>();
+            services.AddMemoryCache();
 
         }
 

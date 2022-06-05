@@ -12,13 +12,12 @@ namespace Linkedin.Service.Visit
 {
   
     public class VisitService : IVisitService
-    {
-        private readonly UnitOfWork _uw;
-        public VisitService(UnitOfWork uw)
+    { 
+        private readonly IUnitOfWork _uw;
+        public VisitService(IUnitOfWork uw)
         {
             _uw = uw;
         }
-
         public IQueryable<Models.Visit> GetAll()
         {
             return _uw.GetRepository<Models.Visit>().GetAll();

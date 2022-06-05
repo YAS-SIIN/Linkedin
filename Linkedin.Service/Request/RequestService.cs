@@ -12,13 +12,12 @@ namespace Linkedin.Service.Request
 {
   
     public class RequestService : IRequestService
-    {
-        private readonly UnitOfWork _uw;
-        public RequestService(UnitOfWork uw)
+    { 
+        private readonly IUnitOfWork _uw;
+        public RequestService(IUnitOfWork uw)
         {
             _uw = uw;
         }
-
         public IQueryable<Models.Request> GetAll()
         {
             return _uw.GetRepository<Models.Request>().GetAll();

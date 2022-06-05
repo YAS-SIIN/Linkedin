@@ -16,7 +16,7 @@ namespace Linkedin.Models
         public string UserId { get; set; }
 
         [Required] 
-        public decimal VisitCount { get; set; }
+        public long VisitCount { get; set; }
 
 
         public virtual ICollection<Activity> Activity { get; set; }
