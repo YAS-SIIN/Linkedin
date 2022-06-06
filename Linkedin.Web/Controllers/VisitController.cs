@@ -27,7 +27,13 @@ namespace Linkedin.Web.Controllers
         [HttpGet]
         public IEnumerable<Visit> Get()
         {
-            return _visitservice.GetAll();
+            return _visitservice.GetAll().Take(100);
+        }
+
+        [HttpGet]
+        public IEnumerable<Visit> ByUser(string UserId)
+        {
+            return _visitservice.GetAll().Where(x => x.UserId == UserId).Take(100);
         }
 
         [HttpPost]

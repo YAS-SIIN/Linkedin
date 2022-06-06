@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using static Linkedin.Common.TypeEnum;
+
 namespace Linkedin.Web.Controllers
 {
     [Route("api/[controller]")]
@@ -27,25 +29,45 @@ namespace Linkedin.Web.Controllers
         [HttpGet]
         public IEnumerable<Request> Get()
         {
-            return _requestService.GetAll();
+            return _requestService.GetAll().Take(100);
+        }
+
+        [HttpGet]
+        public IEnumerable<Request> GetCancel()
+        {
+            return _requestService.GetAll().Where(a => a.Status == (short)RequestStatus.Canceled);
+        }
+
+        [HttpGet]
+        public IEnumerable<Request> GetSubmit()
+        {
+            return _requestService.GetAll().Where(a=>a.Status== (short)RequestStatus.Submit);
         }
 
         [HttpPost]
-        public Request Post([FromBody] Request User)
+        public Request Post([FromBody] Request Request)
         {
-            return _requestService.Insert(User);
+            return _requestService.Insert(Request);
+        }
+
+
+        [HttpDelete]
+        public Request DeleteByUser(string UserId)
+        {
+            Request RecivedRow = _requestService.GetAll().Where(a=>a.UserId==UserId).ElementAt(0);
+            return _requestService.Delete(RecivedRow);
         }
 
         [HttpPut]
-        public Request Update([FromBody] Request User)
+        public Request Update([FromBody] Request Request)
         {
-            return _requestService.Update(User);
+            return _requestService.Update(Request);
         }
 
         [HttpDelete]
-        public Request Delete([FromBody] Request User)
+        public Request Delete([FromBody] Request Request)
         {
-            return _requestService.Delete(User);
+            return _requestService.Delete(Request);
         }
     }
 }

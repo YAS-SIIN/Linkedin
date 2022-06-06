@@ -19,6 +19,6 @@ namespace Linkedin.Service.Request
         Models.Request Insert(Models.Request ObjRequest);
         Models.Request Update(Models.Request ObjRequest);
         Models.Request Delete(Models.Request ObjRequest);
-
+        List<Models.Request> DeleteRange(List<Models.Request> LstObjRequest);
     }
 }

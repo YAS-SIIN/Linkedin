@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Linkedin.Common
 {
-  public  class TypeEnum
+  public class TypeEnum
     {
         public enum UserStatus
         {

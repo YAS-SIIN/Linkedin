@@ -29,7 +29,7 @@ namespace Linkedin.Web.Controllers
         {
             return _userservice.GetAll();
         }
-         
+
         [HttpPost]
         public User Post([FromBody] User User)
         {

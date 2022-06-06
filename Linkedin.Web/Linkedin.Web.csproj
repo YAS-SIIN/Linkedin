@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Linkedin.Common\Linkedin.Common.csproj" />
     <ProjectReference Include="..\Linkedin.Entities\Linkedin.Entities.csproj" />
     <ProjectReference Include="..\Linkedin.Service\Linkedin.Service.csproj" />
   </ItemGroup>

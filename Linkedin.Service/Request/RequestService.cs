@@ -51,6 +51,14 @@ namespace Linkedin.Service.Request
             _uw.SaveChanges();
             return ObjRequest;
         }
- 
+
+        public List<Models.Request> DeleteRange(List<Models.Request> LstObjRequest)
+        {
+
+            _uw.GetRepository<Models.Request>().DeleteRange(LstObjRequest);
+            _uw.SaveChanges();
+            return LstObjRequest;
+        }
+
     }
 }

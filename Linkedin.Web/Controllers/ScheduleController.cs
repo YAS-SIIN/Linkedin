@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using static Linkedin.Common.TypeEnum;
+
 namespace Linkedin.Web.Controllers
 {
     [Route("api/[controller]")]
@@ -28,7 +30,7 @@ namespace Linkedin.Web.Controllers
         public IEnumerable<Schedule> Get()
         {
             return _scheduleservice.GetAll();
-        }
+        } 
 
         [HttpGet]
         public IEnumerable<Schedule> NextVisit()
@@ -45,9 +47,17 @@ namespace Linkedin.Web.Controllers
         [HttpPut]
         public Schedule status(int Id)
         {
-            Schedule GetRow = _scheduleservice.GetAll().Where(x => x.Id == Id).ElementAt(0);
-            GetRow.Status = 1;
-            return _scheduleservice.Update(GetRow);
+            Schedule RecivedRow = _scheduleservice.GetAll().Where(x => x.Id == Id).ElementAt(0);
+            if (RecivedRow.Status == (short)ScheduleStatus.Submit)
+            {
+                RecivedRow.Status = (short)ScheduleStatus.Done;
+            }
+            else
+            {
+                RecivedRow.Status = (short)ScheduleStatus.Submit;
+            }
+           
+            return _scheduleservice.Update(RecivedRow);
         }
 
         [HttpPost]
