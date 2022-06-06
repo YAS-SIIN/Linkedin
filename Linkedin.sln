@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Linkedin.Entities", "Linked
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Linkedin.Service", "Linkedin.Service\Linkedin.Service.csproj", "{9A4E10B6-3D02-467C-8611-F6EA01546365}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linkedin.Models", "Linkedin.Models\Linkedin.Models.csproj", "{782B96BE-3612-4A70-B25C-1AAAC6533CE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Linkedin.Models", "Linkedin.Models\Linkedin.Models.csproj", "{782B96BE-3612-4A70-B25C-1AAAC6533CE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linkedin.Common", "Linkedin.Common\Linkedin.Common.csproj", "{AC24F3BB-1E69-4D4A-A33A-4847B39F6A28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{782B96BE-3612-4A70-B25C-1AAAC6533CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{782B96BE-3612-4A70-B25C-1AAAC6533CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{782B96BE-3612-4A70-B25C-1AAAC6533CE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC24F3BB-1E69-4D4A-A33A-4847B39F6A28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC24F3BB-1E69-4D4A-A33A-4847B39F6A28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC24F3BB-1E69-4D4A-A33A-4847B39F6A28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC24F3BB-1E69-4D4A-A33A-4847B39F6A28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -36,6 +36,20 @@ namespace Linkedin.Web.Controllers
             return _scheduleservice.GetAll();
         }
 
+        [HttpGet]
+        public IEnumerable<Schedule> ByUser(string UserId)
+        {
+            return _scheduleservice.GetAll().Where(x=>x.UserId == UserId);
+        }
+
+        [HttpPut]
+        public Schedule status(int Id)
+        {
+            Schedule GetRow = _scheduleservice.GetAll().Where(x => x.Id == Id).ElementAt(0);
+            GetRow.Status = 1;
+            return _scheduleservice.Update(GetRow);
+        }
+
         [HttpPost]
         public Schedule Post([FromBody] Schedule Schedule)
         {
