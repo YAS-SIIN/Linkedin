@@ -33,7 +33,7 @@ namespace Linkedin.Web.Controllers
             return _visitservice.GetAll().Take(100);
         }
 
-        [HttpGet]
+        [HttpGet, Route("[action]")]
         public IEnumerable<Visit> GetByUser(string UserId)
         {
             User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
@@ -47,17 +47,6 @@ namespace Linkedin.Web.Controllers
             return _visitservice.Insert(Visit);
         }
 
-        //------------------------------------------------
-        [HttpPut]
-        public Visit Update([FromBody] Visit Visit)
-        {
-            return _visitservice.Update(Visit);
-        }
-
-        [HttpDelete]
-        public Visit Delete([FromBody] Visit Visit)
-        {
-            return _visitservice.Delete(Visit);
-        }
+     
     }
 }

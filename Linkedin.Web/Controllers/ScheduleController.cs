@@ -46,7 +46,7 @@ namespace Linkedin.Web.Controllers
            return Qu;
         }
 
-        [HttpGet]
+        [HttpGet,Route("[action]")]
         public IEnumerable<object> NextVisit()
         {
             var Qu = from a in _userservice.GetAll().ToList()
@@ -64,7 +64,7 @@ namespace Linkedin.Web.Controllers
             return Qu;       
         }
 
-        [HttpGet]
+        [HttpGet, Route("[action]")]
         public User GetByUser(string UserId)
         {
             User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
@@ -82,24 +82,6 @@ namespace Linkedin.Web.Controllers
             RecivedRow.UpdateDateTime = DateTime.Now;
             return _scheduleservice.Update(RecivedRow);
         }
- 
-        //----------------------------
-        [HttpPost]
-        public Schedule Post([FromBody] Schedule Schedule)
-        {
-            return _scheduleservice.Insert(Schedule);
-        }
-
-        [HttpPut]
-        public Schedule Update([FromBody] Schedule Schedule)
-        {
-            return _scheduleservice.Update(Schedule);
-        }
-
-        [HttpDelete]
-        public Schedule Delete([FromBody] Schedule Schedule)
-        {
-            return _scheduleservice.Delete(Schedule);
-        }
+        
     }
 }

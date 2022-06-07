@@ -34,13 +34,13 @@ namespace Linkedin.Web.Controllers
             return _activityService.GetAll().Take(100);
         }
 
-        [HttpGet]
+        [HttpGet, Route("[action]")]
         public Activity GetById(int Id)
         {
             return _activityService.GetById(Id);
         }
 
-        [HttpGet]
+        [HttpGet, Route("[action]")]
         public IEnumerable<Activity> GetByUser(string UserId)
         {
             User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
@@ -69,19 +69,6 @@ namespace Linkedin.Web.Controllers
             Activity.CreateDateTime = DateTime.Now;
             return _activityService.Insert(Activity);
         }
-
-        //---------------------------
-        [HttpPut]
-        public Activity Update([FromBody] Activity Activity)
-        {
-            return _activityService.Update(Activity);
-        }
-
-
-        [HttpDelete]
-        public Activity Delete([FromBody] Activity Activity)
-        {
-            return _activityService.Delete(Activity);
-        }
+           
     }
 }

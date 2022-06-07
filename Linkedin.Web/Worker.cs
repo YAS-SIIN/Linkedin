@@ -1,4 +1,6 @@
-﻿using Linkedin.Service.Schedule;
+﻿using Linkedin.Entities.Context;
+using Linkedin.Entities.UnitOfWork;
+using Linkedin.Service.Schedule;
 using Linkedin.Service.UserService;
 
 using Microsoft.Extensions.Configuration;
@@ -22,12 +24,15 @@ namespace Linkedin.Web
         private int executionCount = 0;
         private readonly ILogger<Worker> _logger;
         private Timer? _timer = null;
-        private readonly IUserService _userservice;
+        private readonly IUserService _userservice;  
+       private readonly MyDataBase _MyDataBase;
+        private readonly IUnitOfWork _unitOfWork;
 
         public Worker(ILogger<Worker> logger, IServiceScopeFactory serviceProvider)
         {
             _logger = logger;
-           var a= serviceProvider.CreateScope();
+           var a= serviceProvider.CreateScope();                                
+            _unitOfWork = a.ServiceProvider.GetRequiredService<IUnitOfWork>();       
             _userservice = a.ServiceProvider.GetRequiredService<IUserService>();
             //_userservice = userservice;
             //_scheduleservice = scheduleservice;

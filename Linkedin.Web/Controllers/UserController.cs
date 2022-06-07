@@ -46,17 +46,6 @@ namespace Linkedin.Web.Controllers
             return _userservice.Update(RecivedUserRow);
         }
 
-        //------------------------------------------------------
-        [HttpPut]
-        public User Update([FromBody] User User )
-        {
-            return _userservice.Update(User);
-        }
-
-        [HttpDelete]
-        public User Delete([FromBody] User User)
-        {
-            return _userservice.Delete(User);
-        }
+      
     }
 }

@@ -35,13 +35,13 @@ namespace Linkedin.Web.Controllers
             return _requestService.GetAll().Take(100);
         }
 
-        [HttpGet]
+        [HttpGet, Route("[action]")]
         public IEnumerable<Request> GetCancel()
         { 
             return _requestService.GetAll().Where(a => a.ExpireDateTime > DateTime.Now);
         }
 
-        [HttpGet]
+        [HttpGet, Route("[action]")]
         public IEnumerable<Request> GetSubmit()
         {
             return _requestService.GetAll().Where(a=>a.Status== (short)RequestStatus.Submit);
@@ -57,24 +57,6 @@ namespace Linkedin.Web.Controllers
             return _requestService.Update(RecivedRow);
         }
 
-        //---------------------------------------------------------------
-        [HttpPost]
-        public Request Post([FromBody] Request Request)
-        {
-            return _requestService.Insert(Request);
-        }
-
-
-        [HttpPut]
-        public Request Update([FromBody] Request Request)
-        {
-            return _requestService.Update(Request);
-        }
-
-        [HttpDelete]
-        public Request Delete([FromBody] Request Request)
-        {
-            return _requestService.Delete(Request);
-        }
+     
     }
 }
