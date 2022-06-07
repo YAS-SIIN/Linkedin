@@ -10,7 +10,6 @@ namespace Linkedin.Service.UserService
 {
    public interface IUserService
     {
-
         IQueryable<User> GetAll();
 
         User GetById(int id);

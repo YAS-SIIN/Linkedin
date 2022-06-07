@@ -25,6 +25,7 @@ namespace Linkedin.Web.Controllers
         {
             //_logger = logger;
             _activityService = activityService;
+            _userservice = userservice;
         }
 
         [HttpGet]

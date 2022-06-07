@@ -31,12 +31,12 @@ namespace Linkedin.Web.Controllers
             //_logger = logger;
             _scheduleservice = scheduleservice;
             _userservice = userservice;
+            _activityService = activityService;
         }
         
         [HttpGet]
         public IEnumerable<object> Get()
-        {
-             List<User> RecivedUserRow = _userservice.GetAll().ToList();
+        {                                                               
             var Qu = from a in _userservice.GetAll().ToList()
                      where a.Status == (short)UserStatus.InProgress
                      select new { a, 
@@ -47,12 +47,21 @@ namespace Linkedin.Web.Controllers
         }
 
         [HttpGet]
-        public User NextVisit()
-        {                 
-            User RecivedUserRow = _userservice.GetAll().Where(x => x.Status == (short)UserStatus.InProgress && _scheduleservice.GetAll().Where(x=>x.Status== (short)ScheduleStatus.Submit).Select(x=>x.Id).Contains(x.Id)).ElementAt(0);
-            RecivedUserRow.Schedule = _scheduleservice.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status == (short)ScheduleStatus.Submit).ToList();
-            RecivedUserRow.Activity = _activityService.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status == (short)ActivityStatus.Submit).ToList();
-            return RecivedUserRow;             
+        public IEnumerable<object> NextVisit()
+        {
+            var Qu = from a in _userservice.GetAll().ToList()
+                     join b in _scheduleservice.GetAll()
+                     on a.Id equals b.UserId
+                     where a.Status == (short)UserStatus.InProgress
+                     orderby b.Id
+                     select new
+                     {
+                         a,
+                         Schedule = _scheduleservice.GetAll().Where(x => x.UserId == a.Id && x.Status == (short)ScheduleStatus.Submit).ToList(),
+                         Activity = _activityService.GetAll().Where(x => x.UserId == a.Id && x.Status == (short)ActivityStatus.Submit).ToList()
+                     };
+                     
+            return Qu;       
         }
 
         [HttpGet]

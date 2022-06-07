@@ -28,12 +28,12 @@ namespace Linkedin.Web
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -54,26 +54,27 @@ namespace Linkedin.Web
                         .WithExposedHeaders("X-Pagination"));
             });
              
-            services.AddDbContext<MyDataBase>(options => options.UseSqlServer(Configuration["ConnectionStrings:DatabaseConnection"]));
+            //services.AddDbContext<MyDataBase>(options => options.UseSqlServer(Configuration["ConnectionStrings:DatabaseConnection"]));
 
-            //services.AddTransient<ISettingsService, SettingsService>();
-            //services.AddSingleton<IConfiguration>(Configuration);
+            ////services.AddTransient<ISettingsService, SettingsService>();
+            ////services.AddSingleton<IConfiguration>(Configuration);
           
-            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //services.AddScoped<IGenericRepository<Activity>, GenericRepository<Activity>>();
+            //services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+            //services.AddScoped<IGenericRepository<Request>, GenericRepository<Request>>();
+            //services.AddScoped<IGenericRepository<Schedule>, GenericRepository<Schedule>>();
+            //services.AddScoped<IGenericRepository<Visit>, GenericRepository<Visit>>();
 
-            services.AddScoped<IGenericRepository<Activity>, GenericRepository<Activity>>();
-            services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
-            services.AddScoped<IGenericRepository<Request>, GenericRepository<Request>>();
-            services.AddScoped<IGenericRepository<Schedule>, GenericRepository<Schedule>>();
-            services.AddScoped<IGenericRepository<Visit>, GenericRepository<Visit>>();
+            //services.AddScoped<IActivityService, ActivityService>();
+            //services.AddScoped<IScheduleService, ScheduleService>();
+            //services.AddScoped<IRequestService, RequestService>();
+            //services.AddScoped<IUserService, UserService>();
+            //services.AddScoped<IVisitService, VisitService>();
+ 
 
-            services.AddTransient<IActivityService, ActivityService>();
-            services.AddTransient<IScheduleService, ScheduleService>();
-            services.AddScoped<IRequestService, RequestService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IVisitService, VisitService>();
-            services.AddMemoryCache();
+            //services.AddMemoryCache();
 
         }
 

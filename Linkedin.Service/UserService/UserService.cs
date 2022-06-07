@@ -36,8 +36,7 @@ namespace Linkedin.Service.UserService
         }
 
         public User Update(User ObjUser)
-        {
-
+        {               
             _uw.GetRepository<User>().Update(ObjUser);
             _uw.SaveChanges();
             return ObjUser;
