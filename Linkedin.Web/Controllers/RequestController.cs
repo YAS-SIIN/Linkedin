@@ -1,5 +1,6 @@
 ﻿using Linkedin.Models;
 using Linkedin.Service.Request;
+using Linkedin.Service.UserService;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +21,12 @@ namespace Linkedin.Web.Controllers
     {
         //private readonly ILogger<RequestController> _logger;
         private readonly IRequestService _requestService;
-        public RequestController(IRequestService requestService)
+        private readonly IUserService _userservice; 
+        public RequestController(IRequestService requestService, IUserService userservice)
         {
             //_logger = logger;
             _requestService = requestService;
+            _userservice = userservice;
         }
 
         [HttpGet]
@@ -34,8 +37,8 @@ namespace Linkedin.Web.Controllers
 
         [HttpGet]
         public IEnumerable<Request> GetCancel()
-        {
-            return _requestService.GetAll().Where(a => a.Status == (short)RequestStatus.Canceled);
+        { 
+            return _requestService.GetAll().Where(a => a.ExpireDateTime > DateTime.Now);
         }
 
         [HttpGet]
@@ -44,19 +47,23 @@ namespace Linkedin.Web.Controllers
             return _requestService.GetAll().Where(a=>a.Status== (short)RequestStatus.Submit);
         }
 
+        [HttpPut]
+        public Request ChangeStatusByUser(string UserId)
+        {
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+            Request RecivedRow = _requestService.GetAll().Where(a=>a.UserId== RecivedUserRow.Id).ElementAt(0);
+
+            RecivedRow.UpdateDateTime = DateTime.Now;
+            return _requestService.Update(RecivedRow);
+        }
+
+        //---------------------------------------------------------------
         [HttpPost]
         public Request Post([FromBody] Request Request)
         {
             return _requestService.Insert(Request);
         }
 
-
-        [HttpDelete]
-        public Request DeleteByUser(string UserId)
-        {
-            Request RecivedRow = _requestService.GetAll().Where(a=>a.UserId==UserId).ElementAt(0);
-            return _requestService.Delete(RecivedRow);
-        }
 
         [HttpPut]
         public Request Update([FromBody] Request Request)

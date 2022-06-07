@@ -18,10 +18,12 @@ namespace Linkedin.Models
 
         [Required]
         public DateTime ExpireDateTime { get; set; }
-          
+
         [Required]
-        [StringLength(100)]
-        public string UserId { get; set; }
+        public DateTime UpdateDateTime { get; set; }
+          
+        [Required] 
+        public int UserId { get; set; }
 
         public virtual User User { get; set; }
          

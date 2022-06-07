@@ -14,15 +14,10 @@ namespace Linkedin.Models
         public DateTime CreateDateTime { get; set; }
 
         [Required]
-        public DateTime NextVisitStartDateTime { get; set; }
+        public DateTime UpdateDateTime { get; set; }
          
         [Required]
-        [StringLength(100)]
-        public string Priority { get; set; }
- 
-        [Required]
-        [StringLength(100)]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         public virtual User User { get; set; } 
     }

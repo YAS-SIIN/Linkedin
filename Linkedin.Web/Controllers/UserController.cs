@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Linkedin.Models;
 using Linkedin.Service.UserService;
 using System.Net.Http;
+using static Linkedin.Common.TypeEnum;
 
 namespace Linkedin.Web.Controllers
 {
@@ -33,9 +34,19 @@ namespace Linkedin.Web.Controllers
         [HttpPost]
         public User Post([FromBody] User User)
         {
-         return   _userservice.Insert(User);
+            User.CreateDateTime = DateTime.Now;
+            return _userservice.Insert(User);
         }
-         
+                    
+        [HttpDelete]
+        public User DeleteByUser(string UserId)
+        {
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+            RecivedUserRow.Status = (short)UserStatus.Deleted;
+            return _userservice.Update(RecivedUserRow);
+        }
+
+        //------------------------------------------------------
         [HttpPut]
         public User Update([FromBody] User User )
         {

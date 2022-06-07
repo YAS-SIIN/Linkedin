@@ -1,5 +1,6 @@
 ﻿using Linkedin.Models;
 using Linkedin.Service.Activity;
+using Linkedin.Service.UserService;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,54 +19,68 @@ namespace Linkedin.Web.Controllers
     public class ActivityController : ControllerBase
     {
         //private readonly ILogger<ActivityController> _logger;
-        private readonly IActivityService _ActivityService;
-        public ActivityController(IActivityService ActivityService)
+        private readonly IActivityService _activityService;
+        private readonly IUserService _userservice;
+        public ActivityController(IActivityService activityService, IUserService userservice)
         {
             //_logger = logger;
-            _ActivityService = ActivityService;
+            _activityService = activityService;
         }
 
         [HttpGet]
         public IEnumerable<Activity> Get()
         {
-            return _ActivityService.GetAll().Take(100);
+            return _activityService.GetAll().Take(100);
         }
 
         [HttpGet]
         public Activity GetById(int Id)
         {
-            return _ActivityService.GetById(Id);
+            return _activityService.GetById(Id);
         }
 
         [HttpGet]
-        public IEnumerable<Activity> ByUser(string UserId)
+        public IEnumerable<Activity> GetByUser(string UserId)
         {
-            return _ActivityService.GetAll().Where(x => x.UserId == UserId);
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+        
+            return _activityService.GetAll().Where(a => a.UserId == RecivedUserRow.Id);
+        }
+
+        [HttpPut]
+        public bool ChangeStatusByUser(string UserId)
+        {
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+            IEnumerable<Activity> lstActivities = _activityService.GetAll().Where(a => a.UserId == RecivedUserRow.Id);
+
+            foreach (Activity item in lstActivities)
+            {
+                item.UpdateDateTime = DateTime.Now;
+                _activityService.Update(item);
+            }
+                                                        
+            return true;
         }
 
         [HttpPost]
         public Activity Post([FromBody] Activity Activity)
         {
-            return _ActivityService.Insert(Activity);
+            Activity.CreateDateTime = DateTime.Now;
+            return _activityService.Insert(Activity);
         }
 
+        //---------------------------
         [HttpPut]
         public Activity Update([FromBody] Activity Activity)
         {
-            return _ActivityService.Update(Activity);
+            return _activityService.Update(Activity);
         }
 
-        [HttpPut]
-        public Activity Like([FromBody] Activity Activity)
-        {
-            Activity.Status = (short)ActivityStatus.Liked;
-            return _ActivityService.Update(Activity);
-        }
 
         [HttpDelete]
         public Activity Delete([FromBody] Activity Activity)
         {
-            return _ActivityService.Delete(Activity);
+            return _activityService.Delete(Activity);
         }
     }
 }

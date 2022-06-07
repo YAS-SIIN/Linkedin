@@ -1,4 +1,5 @@
 ﻿using Linkedin.Models;
+using Linkedin.Service.UserService;
 using Linkedin.Service.Visit;
 
 using Microsoft.AspNetCore.Http;
@@ -18,10 +19,12 @@ namespace Linkedin.Web.Controllers
     {
         //private readonly ILogger<VisitController> _logger;
         private readonly IVisitService _visitservice;
-        public VisitController(IVisitService visitservice)
+        private readonly IUserService _userservice;
+        public VisitController(IVisitService visitservice, IUserService userservice)
         {
             //_logger = logger;
             _visitservice = visitservice;
+            _userservice = userservice;
         }
 
         [HttpGet]
@@ -31,17 +34,20 @@ namespace Linkedin.Web.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Visit> ByUser(string UserId)
+        public IEnumerable<Visit> GetByUser(string UserId)
         {
-            return _visitservice.GetAll().Where(x => x.UserId == UserId).Take(100);
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+            return _visitservice.GetAll().Where(x => x.UserId == RecivedUserRow.Id).Take(100);
         }
 
         [HttpPost]
         public Visit Post([FromBody] Visit Visit)
         {
+            Visit.CreateDateTime = DateTime.Now;
             return _visitservice.Insert(Visit);
         }
 
+        //------------------------------------------------
         [HttpPut]
         public Visit Update([FromBody] Visit Visit)
         {

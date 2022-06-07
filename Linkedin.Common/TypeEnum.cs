@@ -28,8 +28,8 @@ namespace Linkedin.Common
             [Display(Name = "Submit")]
             Submit = 1,
 
-            [Display(Name = "Done")]
-            Done = 2
+            [Display(Name = "Deleted")]
+            Deleted = 2
         }
 
         public enum ActivityStatus
@@ -50,11 +50,20 @@ namespace Linkedin.Common
             [Display(Name = "Submit")]
             Submit = 1,
 
+            [Display(Name = "Scheduled")]
+            Scheduled = 2,
+
             [Display(Name = "Requested")]
-            Requested = 2,
+            Requested = 3,
+
+            [Display(Name = "Rejected")]
+            Rejected = 4,
+
+            [Display(Name = "Accepted")]
+            Accepted = 5,
 
             [Display(Name = "Canceled")]
-            Canceled = 3
+            Canceled = 6
         }
     }
 }

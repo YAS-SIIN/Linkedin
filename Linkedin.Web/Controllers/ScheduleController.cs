@@ -1,5 +1,7 @@
 ﻿using Linkedin.Models;
+using Linkedin.Service.Activity;
 using Linkedin.Service.Schedule;
+using Linkedin.Service.UserService;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,47 +21,60 @@ namespace Linkedin.Web.Controllers
     public class ScheduleController : ControllerBase
     {
         //private readonly ILogger<ScheduleController> _logger;
-        private readonly IScheduleService _scheduleservice;
-        public ScheduleController( IScheduleService scheduleservice)
+        private readonly IScheduleService _scheduleservice; 
+        private readonly IUserService _userservice;
+        private readonly IActivityService _activityService;
+
+        public ScheduleController( IScheduleService scheduleservice, 
+            IUserService userservice, IActivityService activityService)
         {
             //_logger = logger;
             _scheduleservice = scheduleservice;
+            _userservice = userservice;
+        }
+        
+        [HttpGet]
+        public IEnumerable<object> Get()
+        {
+             List<User> RecivedUserRow = _userservice.GetAll().ToList();
+            var Qu = from a in _userservice.GetAll().ToList()
+                     where a.Status == (short)UserStatus.InProgress
+                     select new { a, 
+                        Schedule = _scheduleservice.GetAll().Where(x => x.UserId == a.Id && x.Status == (short)ScheduleStatus.Submit).ToList() ,
+                        Activity = _activityService.GetAll().Where(x => x.UserId == a.Id && x.Status == (short)ActivityStatus.Submit).ToList()
+                    };
+           return Qu;
         }
 
         [HttpGet]
-        public IEnumerable<Schedule> Get()
-        {
-            return _scheduleservice.GetAll();
-        } 
-
-        [HttpGet]
-        public IEnumerable<Schedule> NextVisit()
-        {
-            return _scheduleservice.GetAll();
+        public User NextVisit()
+        {                 
+            User RecivedUserRow = _userservice.GetAll().Where(x => x.Status == (short)UserStatus.InProgress && _scheduleservice.GetAll().Where(x=>x.Status== (short)ScheduleStatus.Submit).Select(x=>x.Id).Contains(x.Id)).ElementAt(0);
+            RecivedUserRow.Schedule = _scheduleservice.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status == (short)ScheduleStatus.Submit).ToList();
+            RecivedUserRow.Activity = _activityService.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status == (short)ActivityStatus.Submit).ToList();
+            return RecivedUserRow;             
         }
 
         [HttpGet]
-        public IEnumerable<Schedule> ByUser(string UserId)
+        public User GetByUser(string UserId)
         {
-            return _scheduleservice.GetAll().Where(x=>x.UserId == UserId);
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+            RecivedUserRow.Schedule = _scheduleservice.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status == (short)ScheduleStatus.Submit).ToList();
+            RecivedUserRow.Activity = _activityService.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status== (short)ActivityStatus.Submit).ToList();
+            return RecivedUserRow;
         }
 
         [HttpPut]
-        public Schedule status(int Id)
+        public Schedule ChangeStatusByUser(string UserId)
         {
-            Schedule RecivedRow = _scheduleservice.GetAll().Where(x => x.Id == Id).ElementAt(0);
-            if (RecivedRow.Status == (short)ScheduleStatus.Submit)
-            {
-                RecivedRow.Status = (short)ScheduleStatus.Done;
-            }
-            else
-            {
-                RecivedRow.Status = (short)ScheduleStatus.Submit;
-            }
-           
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+            Schedule RecivedRow = _scheduleservice.GetAll().Where(a => a.UserId == RecivedUserRow.Id).ElementAt(0);
+            RecivedRow.Status = (short)ScheduleStatus.Deleted;
+            RecivedRow.UpdateDateTime = DateTime.Now;
             return _scheduleservice.Update(RecivedRow);
         }
-
+ 
+        //----------------------------
         [HttpPost]
         public Schedule Post([FromBody] Schedule Schedule)
         {
