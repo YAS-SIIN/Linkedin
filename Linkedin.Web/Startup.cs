@@ -53,28 +53,28 @@ namespace Linkedin.Web
                         .AllowAnyHeader()
                         .WithExposedHeaders("X-Pagination"));
             });
-             
-            //services.AddDbContext<MyDataBase>(options => options.UseSqlServer(Configuration["ConnectionStrings:DatabaseConnection"]));
 
-            ////services.AddTransient<ISettingsService, SettingsService>();
-            ////services.AddSingleton<IConfiguration>(Configuration);
-          
-            //services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
-            //services.AddScoped<IGenericRepository<Activity>, GenericRepository<Activity>>();
-            //services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
-            //services.AddScoped<IGenericRepository<Request>, GenericRepository<Request>>();
-            //services.AddScoped<IGenericRepository<Schedule>, GenericRepository<Schedule>>();
-            //services.AddScoped<IGenericRepository<Visit>, GenericRepository<Visit>>();
+            services.AddDbContext<MyDataBase>(options => options.UseSqlServer(Configuration["ConnectionStrings:DatabaseConnection"]));
 
-            //services.AddScoped<IActivityService, ActivityService>();
-            //services.AddScoped<IScheduleService, ScheduleService>();
-            //services.AddScoped<IRequestService, RequestService>();
-            //services.AddScoped<IUserService, UserService>();
-            //services.AddScoped<IVisitService, VisitService>();
- 
+            //services.AddTransient<ISettingsService, SettingsService>();
+            //services.AddSingleton<IConfiguration>(Configuration);
 
-            //services.AddMemoryCache();
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IGenericRepository<Activity>, GenericRepository<Activity>>();
+            services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+            services.AddScoped<IGenericRepository<Request>, GenericRepository<Request>>();
+            services.AddScoped<IGenericRepository<Schedule>, GenericRepository<Schedule>>();
+            services.AddScoped<IGenericRepository<Visit>, GenericRepository<Visit>>();
+
+            services.AddScoped<IActivityService, ActivityService>();
+            services.AddScoped<IScheduleService, ScheduleService>();
+            services.AddScoped<IRequestService, RequestService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IVisitService, VisitService>();
+
+            services.AddHostedService<Worker>();
+            services.AddMemoryCache();
 
         }
 

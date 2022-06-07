@@ -2,6 +2,7 @@
 using Linkedin.Service.UserService;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -21,19 +22,16 @@ namespace Linkedin.Web
         private int executionCount = 0;
         private readonly ILogger<Worker> _logger;
         private Timer? _timer = null;
-
-        private readonly IScheduleService _scheduleservice;
         private readonly IUserService _userservice;
 
-        public Worker(ILogger<Worker> logger, IConfiguration configuration, 
-            IScheduleService scheduleservice,
-            IUserService userservice)
+        public Worker(ILogger<Worker> logger, IServiceScopeFactory serviceProvider)
         {
             _logger = logger;
-                                                          
-            _userservice = userservice;
-            _scheduleservice = scheduleservice;
-            Configuration = configuration;
+           var a= serviceProvider.CreateScope();
+            _userservice = a.ServiceProvider.GetRequiredService<IUserService>();
+            //_userservice = userservice;
+            //_scheduleservice = scheduleservice;
+            //Configuration = configuration;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -41,14 +39,14 @@ namespace Linkedin.Web
             _logger.LogInformation("Timed Hosted Service running.");
 
             _timer = new Timer(DoWork, null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(double.Parse( Configuration["WorkerTimePeriod"])));
+                TimeSpan.FromSeconds(5));
 
             return Task.CompletedTask;
         }
 
         private void DoWork(object? state)
         {
-            //var Qu = _userservice.GetAll().ToList().Where(x => x.Status == (short)UserStatus.Submit && _scheduleservice.GetAll().Select(a=>a.UserId).Contains(x.Id)).OrderBy(x => x.Id);
+            var Qu = _userservice.GetAll().ToList().Where(x => x.Status == (short)UserStatus.Submit).OrderBy(x => x.Id);
                 
 
             var count = Interlocked.Increment(ref executionCount);
