@@ -20,15 +20,15 @@ namespace Linkedin.Web.Controllers
     [ApiController]
     public class ScheduleController : ControllerBase
     {
-        //private readonly ILogger<ScheduleController> _logger;
+        private readonly ILogger<ScheduleController> _logger;
         private readonly IScheduleService _scheduleservice; 
         private readonly IUserService _userservice;
         private readonly IActivityService _activityService;
 
-        public ScheduleController( IScheduleService scheduleservice, 
+        public ScheduleController(ILogger<ScheduleController> logger, IScheduleService scheduleservice, 
             IUserService userservice, IActivityService activityService)
         {
-            //_logger = logger;
+            _logger = logger;
             _scheduleservice = scheduleservice;
             _userservice = userservice;
             _activityService = activityService;
@@ -36,7 +36,9 @@ namespace Linkedin.Web.Controllers
         
         [HttpGet]
         public IEnumerable<object> Get()
-        {                                                               
+        {
+            _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
+
             var Qu = from a in _userservice.GetAll().ToList()
                      where a.Status == (short)UserStatus.InProgress
                      select new { a, 
@@ -49,6 +51,8 @@ namespace Linkedin.Web.Controllers
         [HttpGet,Route("[action]")]
         public IEnumerable<object> NextVisit()
         {
+            _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
+
             var Qu = from a in _userservice.GetAll().ToList()
                      join b in _scheduleservice.GetAll()
                      on a.Id equals b.UserId
@@ -67,6 +71,8 @@ namespace Linkedin.Web.Controllers
         [HttpGet, Route("[action]")]
         public User GetByUser(string UserId)
         {
+            _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
+
             User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
             RecivedUserRow.Schedule = _scheduleservice.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status == (short)ScheduleStatus.Submit).ToList();
             RecivedUserRow.Activity = _activityService.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status== (short)ActivityStatus.Submit).ToList();
@@ -76,6 +82,8 @@ namespace Linkedin.Web.Controllers
         [HttpPut]
         public Schedule ChangeStatusByUser(string UserId)
         {
+            _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
+
             User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
             Schedule RecivedRow = _scheduleservice.GetAll().Where(a => a.UserId == RecivedUserRow.Id).ElementAt(0);
             RecivedRow.Status = (short)ScheduleStatus.Deleted;

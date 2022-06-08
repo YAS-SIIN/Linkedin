@@ -22,4 +22,10 @@
     <ProjectReference Include="..\Linkedin.Models\Linkedin.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Linkedin.Entities.deps.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

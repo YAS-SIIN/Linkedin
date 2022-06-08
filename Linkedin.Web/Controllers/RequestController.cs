@@ -19,12 +19,12 @@ namespace Linkedin.Web.Controllers
     [ApiController]
     public class RequestController : ControllerBase
     {
-        //private readonly ILogger<RequestController> _logger;
+        private readonly ILogger<RequestController> _logger;
         private readonly IRequestService _requestService;
         private readonly IUserService _userservice; 
-        public RequestController(IRequestService requestService, IUserService userservice)
+        public RequestController(ILogger<RequestController> logger, IRequestService requestService, IUserService userservice)
         {
-            //_logger = logger;
+            _logger = logger;
             _requestService = requestService;
             _userservice = userservice;
         }
@@ -32,24 +32,32 @@ namespace Linkedin.Web.Controllers
         [HttpGet]
         public IEnumerable<Request> Get()
         {
+            _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
+
             return _requestService.GetAll().Take(100);
         }
 
         [HttpGet, Route("[action]")]
         public IEnumerable<Request> GetCancel()
-        { 
+        {
+            _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
+
             return _requestService.GetAll().Where(a => a.ExpireDateTime > DateTime.Now);
         }
 
         [HttpGet, Route("[action]")]
         public IEnumerable<Request> GetSubmit()
         {
+            _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
+
             return _requestService.GetAll().Where(a=>a.Status== (short)RequestStatus.Submit);
         }
 
         [HttpPut]
         public Request ChangeStatusByUser(string UserId)
         {
+            _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
+
             User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
             Request RecivedRow = _requestService.GetAll().Where(a=>a.UserId== RecivedUserRow.Id).ElementAt(0);
 

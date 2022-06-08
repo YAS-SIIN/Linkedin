@@ -17,7 +17,7 @@ namespace Linkedin.Models
         public TKey Id { get; set; }
 
         [Required]
-        public Int16 Status { get; set; }
+        public short Status { get; set; }
     }
 
     public abstract class BaseEntity : BaseEntity<int>
