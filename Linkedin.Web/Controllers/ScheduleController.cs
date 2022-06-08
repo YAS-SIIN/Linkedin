@@ -39,13 +39,10 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            var Qu = from a in _userservice.GetAll().ToList()
-                     where a.Status == (short)UserStatus.InProgress
-                     select new { a, 
-                        Schedule = _scheduleservice.GetAll().Where(x => x.UserId == a.Id && x.Status == (short)ScheduleStatus.Submit).ToList() ,
-                        Activity = _activityService.GetAll().Where(x => x.UserId == a.Id && x.Status == (short)ActivityStatus.Submit).ToList()
-                    };
-           return Qu;
+            return _userservice.GetAll().ToList().Where(x => x.Status == (short)UserStatus.InProgress).
+                Select(x => new { x, Schedule = _scheduleservice.GetAll().Where(a => a.UserId == x.Id && a.Status == (short)ScheduleStatus.Submit).ToList(),
+                    Activity = _activityService.GetAll().Where(b => b.UserId == x.Id && b.Status == (short)ActivityStatus.Submit).ToList()
+                });              
         }
 
         [HttpGet,Route("[action]")]

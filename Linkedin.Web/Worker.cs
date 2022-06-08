@@ -1,5 +1,6 @@
 ﻿using Linkedin.Entities.Context;
 using Linkedin.Entities.UnitOfWork;
+using Linkedin.Models;
 using Linkedin.Service.Schedule;
 using Linkedin.Service.UserService;
 
@@ -24,19 +25,19 @@ namespace Linkedin.Web
         private int executionCount = 0;
         private readonly ILogger<Worker> _logger;
         private Timer? _timer = null;
-        private readonly IUserService _userservice;  
-       private readonly MyDataBase _MyDataBase;
+        private readonly IUserService _userservice;
+        private readonly IScheduleService _scheduleservice;
+
         private readonly IUnitOfWork _unitOfWork;
 
-        public Worker(ILogger<Worker> logger, IServiceScopeFactory serviceProvider)
+        public Worker(ILogger<Worker> logger, IServiceScopeFactory serviceProvider, 
+            IScheduleService scheduleservice, IConfiguration configuration)
         {
             _logger = logger;
            var a= serviceProvider.CreateScope();                                
             _unitOfWork = a.ServiceProvider.GetRequiredService<IUnitOfWork>();       
             _userservice = a.ServiceProvider.GetRequiredService<IUserService>();
-            //_userservice = userservice;
-            //_scheduleservice = scheduleservice;
-            //Configuration = configuration;
+            Configuration = configuration;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -44,16 +45,40 @@ namespace Linkedin.Web
             _logger.LogInformation("Timed Hosted Service running.");
 
             _timer = new Timer(DoWork, null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(10));
+                TimeSpan.FromSeconds(double.Parse(Configuration["WorkerTimePeriod"])));
 
             return Task.CompletedTask;
         }
 
         private void DoWork(object? state)
         {
-            var Qu = _userservice.GetAll().ToList().Where(x => x.Status == (short)UserStatus.Submit).OrderBy(x => x.Id);
-                
+            int countUserRow = int.Parse(Configuration["CountUserRow"]);
 
+            var Qu = _userservice.GetAll().ToList().Where(x => x.Status == (short)UserStatus.Submit).OrderBy(x => x.Id).Take(countUserRow);
+
+            var Qu2 =   from a in _userservice.GetAll().ToList()
+                               join b in _scheduleservice.GetAll()
+                               on a.Id equals b.UserId
+                               where a.Status == (short)UserStatus.InProgress
+                               orderby b.Id
+                               select a;
+
+            var endCount = countUserRow - Qu2.Count();
+
+            if (endCount>0)
+            {
+                endCount = Qu.Count() > endCount ? endCount : Qu.Count();
+
+                for (int i = 0; i < endCount; i++)
+                {
+                    Schedule objSchedule = new Schedule();
+
+                    objSchedule.UserId=
+                    _scheduleservice.Insert(obj);
+                }
+            }
+          
+       
             var count = Interlocked.Increment(ref executionCount);
 
             _logger.LogInformation(
