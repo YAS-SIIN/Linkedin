@@ -61,11 +61,12 @@ namespace Linkedin.Web.Controllers
                          Schedule = _scheduleservice.GetAll().Where(x => x.UserId == a.Id && x.Status == (short)ScheduleStatus.Submit).ToList(),
                          Activity = _activityService.GetAll().Where(x => x.UserId == a.Id && x.Status == (short)ActivityStatus.Submit).ToList()
                      };
+
                      
             return Qu;       
         }
 
-        [HttpGet, Route("[action]")]
+        [HttpGet, Route("[action]")]      
         public User GetByUser(string UserId)
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
