@@ -28,15 +28,17 @@ namespace Linkedin.Web
         private readonly IUserService _userservice;
         private readonly IScheduleService _scheduleservice;
 
+        private readonly MyDataBase _myDataBase;
         private readonly IUnitOfWork _unitOfWork;
 
         public Worker(ILogger<Worker> logger, IServiceScopeFactory serviceProvider, 
-            IScheduleService scheduleservice, IConfiguration configuration)
+            IConfiguration configuration)
         {
             _logger = logger;
            var a= serviceProvider.CreateScope();                                
             _unitOfWork = a.ServiceProvider.GetRequiredService<IUnitOfWork>();       
             _userservice = a.ServiceProvider.GetRequiredService<IUserService>();
+            _scheduleservice = a.ServiceProvider.GetRequiredService<IScheduleService>();
             Configuration = configuration;
         }
 
@@ -54,28 +56,26 @@ namespace Linkedin.Web
         {
             int countUserRow = int.Parse(Configuration["CountUserRow"]);
 
-            var Qu = _userservice.GetAll().ToList().Where(x => x.Status == (short)UserStatus.Submit).OrderBy(x => x.Id).Take(countUserRow);
+            var Qu = _userservice.GetAll().ToList()
+                .Where(x => x.Status == (short)UserStatus.Submit && !_scheduleservice.GetAll().Where(a=>a.Status == (short)ScheduleStatus.Submit).Select(a => a.Id).Contains(x.Id))
+            .OrderBy(x => x.Id).Take(countUserRow);
 
             var Qu2 =   from a in _userservice.GetAll().ToList()
                                join b in _scheduleservice.GetAll()
                                on a.Id equals b.UserId
-                               where a.Status == (short)UserStatus.InProgress
+                               where a.Status == (short)UserStatus.InProgress && b.Status == (short)ScheduleStatus.Submit
                                orderby b.Id
                                select a;
 
             var endCount = countUserRow - Qu2.Count();
 
-            if (endCount>0)
+            if (Qu.Count()> 0)
             {
-                endCount = Qu.Count() > endCount ? endCount : Qu.Count();
+                Schedule objSchedule = new Schedule();
 
-                for (int i = 0; i < endCount; i++)
-                {
-                    Schedule objSchedule = new Schedule();
-
-                    objSchedule.UserId=
-                    _scheduleservice.Insert(obj);
-                }
+                objSchedule.UserId = Qu.ToList().ElementAt(0).Id;
+                objSchedule.Status = (short)ScheduleStatus.Submit;
+                _scheduleservice.Insert(objSchedule);
             }
           
        
