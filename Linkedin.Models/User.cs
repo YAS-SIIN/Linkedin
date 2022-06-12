@@ -13,12 +13,9 @@ namespace Linkedin.Models
         [Required] 
         [StringLength(100)]
         public string ExternalUserId { get; set; }
-
+                            
         [Required] 
         public long VisitCount { get; set; }
-                 
-        [Required]
-        public DateTime CreateDateTime { get; set; }
 
         public virtual ICollection<Activity> Activity { get; set; }
         public virtual ICollection<Visit> Visit { get; set; }

@@ -9,6 +9,7 @@ namespace Linkedin.Models
     public interface IEntity
     {  
         public Int16 Status { get; set; }
+        public DateTime CreateDateTime { get; set; }
     }
 
     public abstract class BaseEntity<TKey> : IEntity
@@ -18,6 +19,9 @@ namespace Linkedin.Models
 
         [Required]
         public short Status { get; set; }
+                      
+        [Required]
+        public DateTime CreateDateTime { get; set; }
     }
 
     public abstract class BaseEntity : BaseEntity<int>

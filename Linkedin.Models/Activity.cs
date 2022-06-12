@@ -14,10 +14,7 @@ namespace Linkedin.Models
         [Required]
         [StringLength(100)]
         public string ActivityId { get; set; }
-
-        [Required]
-        public DateTime CreateDateTime { get; set; }
-         
+        
         [Required]
         public DateTime UpdateDateTime { get; set; }
          

@@ -46,7 +46,7 @@ namespace Linkedin.Web.Controllers
         }
 
         [HttpGet,Route("[action]")]
-        public IEnumerable<object> NextVisit()
+        public object NextVisit()
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
@@ -63,7 +63,7 @@ namespace Linkedin.Web.Controllers
                      };
 
                      
-            return Qu;       
+            return Qu.ElementAt(0);       
         }
 
         [HttpGet, Route("[action]")]      
@@ -71,7 +71,7 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ToList().ElementAt(0);
             RecivedUserRow.Schedule = _scheduleservice.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status == (short)ScheduleStatus.Submit).ToList();
             RecivedUserRow.Activity = _activityService.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status== (short)ActivityStatus.Submit).ToList();
             return RecivedUserRow;

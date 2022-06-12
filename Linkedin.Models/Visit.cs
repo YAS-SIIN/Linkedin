@@ -10,9 +10,7 @@ namespace Linkedin.Models
     public class Visit : BaseEntity<int>
     {
 
-
-        [Required]
-        public DateTime CreateDateTime { get; set; }
+                                                  
 
         [Required]
         public int UserId { get; set; }

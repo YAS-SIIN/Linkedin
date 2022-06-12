@@ -8,11 +8,7 @@ using System.Threading.Tasks;
 namespace Linkedin.Models
 {
     public class Request : BaseEntity<int>
-    {
-         
-        [Required]
-        public DateTime CreateDateTime { get; set; }
-
+    {    
         [Required]
         public DateTime RequestDateTime { get; set; }
 

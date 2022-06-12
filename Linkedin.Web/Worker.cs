@@ -75,7 +75,16 @@ namespace Linkedin.Web
 
                 objSchedule.UserId = Qu.ToList().ElementAt(0).Id;
                 objSchedule.Status = (short)ScheduleStatus.Submit;
+                objSchedule.CreateDateTime = DateTime.Now;
+                objSchedule.UpdateDateTime =DateTime.Now;
                 _scheduleservice.Insert(objSchedule);
+
+
+                User objUser = new User();
+                objUser = Qu.ToList().ElementAt(0);
+
+                objUser.Status = (short)UserStatus.InProgress;         
+                _userservice.Update(objUser);
             }
           
        
