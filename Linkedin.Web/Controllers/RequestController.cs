@@ -54,7 +54,7 @@ namespace Linkedin.Web.Controllers
         }
 
         [HttpPut]
-        public Request ChangeStatusByUser(string UserId)
+        public Request ChangeStatusByUser(string UserId, short Status)
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
@@ -62,6 +62,7 @@ namespace Linkedin.Web.Controllers
             Request RecivedRow = _requestService.GetAll().Where(a=>a.UserId== RecivedUserRow.Id).ElementAt(0);
 
             RecivedRow.UpdateDateTime = DateTime.Now;
+            RecivedRow.Status = Status;
             return _requestService.Update(RecivedRow);
         }
 

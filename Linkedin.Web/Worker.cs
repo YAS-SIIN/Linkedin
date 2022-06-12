@@ -1,6 +1,7 @@
 ﻿using Linkedin.Entities.Context;
 using Linkedin.Entities.UnitOfWork;
 using Linkedin.Models;
+using Linkedin.Service.Request;
 using Linkedin.Service.Schedule;
 using Linkedin.Service.UserService;
 
@@ -27,6 +28,7 @@ namespace Linkedin.Web
         private Timer? _timer = null;
         private readonly IUserService _userservice;
         private readonly IScheduleService _scheduleservice;
+        private readonly IRequestService _requestService;
 
         private readonly MyDataBase _myDataBase;
         private readonly IUnitOfWork _unitOfWork;
@@ -39,6 +41,7 @@ namespace Linkedin.Web
             _unitOfWork = a.ServiceProvider.GetRequiredService<IUnitOfWork>();       
             _userservice = a.ServiceProvider.GetRequiredService<IUserService>();
             _scheduleservice = a.ServiceProvider.GetRequiredService<IScheduleService>();
+            _requestService = a.ServiceProvider.GetRequiredService<IRequestService>();
             Configuration = configuration;
         }
 
@@ -56,37 +59,53 @@ namespace Linkedin.Web
         {
             int countUserRow = int.Parse(Configuration["CountUserRow"]);
 
-            var Qu = _userservice.GetAll().ToList()
-                .Where(x => x.Status == (short)UserStatus.Submit && !_scheduleservice.GetAll().Where(a=>a.Status == (short)ScheduleStatus.Submit).Select(a => a.Id).Contains(x.Id))
-            .OrderBy(x => x.Id).Take(countUserRow);
-
-            var Qu2 =   from a in _userservice.GetAll().ToList()
-                               join b in _scheduleservice.GetAll()
-                               on a.Id equals b.UserId
-                               where a.Status == (short)UserStatus.InProgress && b.Status == (short)ScheduleStatus.Submit
-                               orderby b.Id
-                               select a;
+            var Qu2 = from a in _userservice.GetAll().ToList()
+                      join b in _scheduleservice.GetAll()
+                      on a.Id equals b.UserId
+                      where a.Status == (short)UserStatus.InProgress && b.Status == (short)ScheduleStatus.Submit
+                      orderby b.Id
+                      select a;
 
             var endCount = countUserRow - Qu2.Count();
 
-            if (Qu.Count()> 0)
+            if (endCount > 0)
             {
-                Schedule objSchedule = new Schedule();
+                var Qu = _userservice.GetAll().ToList()
+    .Where(x => x.Status == (short)UserStatus.Submit && !_scheduleservice.GetAll().Where(a => a.Status == (short)ScheduleStatus.Submit).Select(a => a.Id).Contains(x.Id))
+.OrderBy(x => x.Id).Take(endCount);
 
-                objSchedule.UserId = Qu.ToList().ElementAt(0).Id;
-                objSchedule.Status = (short)ScheduleStatus.Submit;
-                objSchedule.CreateDateTime = DateTime.Now;
-                objSchedule.UpdateDateTime =DateTime.Now;
-                _scheduleservice.Insert(objSchedule);
+                foreach (var item in Qu)
+                {
+                    Schedule objSchedule = new Schedule();
+
+                    objSchedule.UserId = Qu.ToList().ElementAt(0).Id;
+                    objSchedule.Status = (short)ScheduleStatus.Submit;
+                    objSchedule.CreateDateTime = DateTime.Now;
+                    objSchedule.UpdateDateTime = DateTime.Now;
+                    _scheduleservice.Insert(objSchedule);
+
+       
+                    item.Status = (short)UserStatus.InProgress;
+                    _userservice.Update(item);
+
+                    Request objRequest = new Request();
+
+                    objRequest.UserId = Qu.ToList().ElementAt(0).Id;
+                    objRequest.Status = (short)ScheduleStatus.Submit;
+                    objRequest.CreateDateTime = DateTime.Now;
+                    objRequest.UpdateDateTime = DateTime.Now;
+                    _requestService.Insert(objRequest);
+
+                }
+
+                
 
 
-                User objUser = new User();
-                objUser = Qu.ToList().ElementAt(0);
-
-                objUser.Status = (short)UserStatus.InProgress;         
-                _userservice.Update(objUser);
             }
-          
+
+
+
+        
        
             var count = Interlocked.Increment(ref executionCount);
 

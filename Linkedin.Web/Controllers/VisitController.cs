@@ -1,15 +1,19 @@
 ﻿using Linkedin.Models;
+using Linkedin.Service.Request;
 using Linkedin.Service.UserService;
 using Linkedin.Service.Visit;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using static Linkedin.Common.TypeEnum;
 
 namespace Linkedin.Web.Controllers
 {
@@ -20,11 +24,16 @@ namespace Linkedin.Web.Controllers
         private readonly ILogger<VisitController> _logger;
         private readonly IVisitService _visitservice;
         private readonly IUserService _userservice;
-        public VisitController(ILogger<VisitController> logger, IVisitService visitservice, IUserService userservice)
+        private readonly IRequestService _requestService;
+        public IConfiguration Configuration { get; }
+
+        public VisitController(ILogger<VisitController> logger, IVisitService visitservice, 
+            IRequestService requestService, IUserService userservice, IConfiguration configuration)
         {
             _logger = logger;
             _visitservice = visitservice;
             _userservice = userservice;
+            _requestService = requestService;
         }
 
         [HttpGet]
@@ -45,12 +54,30 @@ namespace Linkedin.Web.Controllers
         }
 
         [HttpPost]
-        public Visit Post([FromBody] Visit Visit)
+        public Visit Post(string UserId)
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
-               
-            Visit.CreateDateTime = DateTime.Now;
-            return _visitservice.Insert(Visit);
+
+            int countVisitToRequest = int.Parse(Configuration["CountVisitToRequest"]);
+
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+
+            RecivedUserRow.VisitCount += 1;  
+            _userservice.Update(RecivedUserRow);
+
+            if (RecivedUserRow.VisitCount > countVisitToRequest)
+            {
+                Request RecivedRequestRow = _requestService.GetAll().Where(a => a.UserId == RecivedUserRow.Id).ElementAt(0);
+                RecivedRequestRow.Status = (short)RequestStatus.Scheduled;
+                RecivedRequestRow.UpdateDateTime = DateTime.Now;
+                _requestService.Update(RecivedRequestRow);      
+            }
+
+            Visit ObjVisit = new Visit();
+            ObjVisit.CreateDateTime = DateTime.Now;
+            ObjVisit.Id = RecivedUserRow.Id;
+
+            return _visitservice.Insert(ObjVisit);
         }
 
      

@@ -9,9 +9,7 @@ namespace Linkedin.Models
 {
     public class Request : BaseEntity<int>
     {    
-        [Required]
-        public DateTime RequestDateTime { get; set; }
-
+ 
         [Required]
         public DateTime ExpireDateTime { get; set; }
 
