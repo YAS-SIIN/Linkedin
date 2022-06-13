@@ -48,8 +48,8 @@ namespace Linkedin.Web.Controllers
         public IEnumerable<Activity> GetByUser(string UserId)
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
-
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+ 
+            User RecivedUserRow = _userservice.GetAll().ToList().Where(a => a.ExternalUserId == UserId).ElementAt(0);
         
             return _activityService.GetAll().Where(a => a.UserId == RecivedUserRow.Id);
         }
@@ -59,8 +59,8 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
-            IEnumerable<Activity> lstActivities = _activityService.GetAll().Where(a => a.UserId == RecivedUserRow.Id);
+            User RecivedUserRow = _userservice.GetAll().ToList().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+            IEnumerable<Activity> lstActivities = _activityService.GetAll().ToList().Where(a => a.UserId == RecivedUserRow.Id);
 
             foreach (Activity item in lstActivities)
             {
@@ -78,6 +78,7 @@ namespace Linkedin.Web.Controllers
 
             Activity.Status = (short)UserStatus.Submit;
             Activity.CreateDateTime = DateTime.Now;
+            Activity.UpdateDateTime = DateTime.Now;
             return _activityService.Insert(Activity);
         }
            

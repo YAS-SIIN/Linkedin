@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Linkedin.Common\Linkedin.Common.csproj" />
     <ProjectReference Include="..\Linkedin.Entities\Linkedin.Entities.csproj" />
     <ProjectReference Include="..\Linkedin.Models\Linkedin.Models.csproj" />
   </ItemGroup>

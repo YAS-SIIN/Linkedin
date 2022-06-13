@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using static Linkedin.Common.TypeEnum;
+
 namespace Linkedin.Service.UserService
 {
   public class UserService:IUserService

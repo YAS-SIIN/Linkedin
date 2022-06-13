@@ -49,7 +49,7 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+            User RecivedUserRow = _userservice.GetAll().ToList().Where(a => a.ExternalUserId == UserId).ElementAt(0);
             return _visitservice.GetAll().Where(x => x.UserId == RecivedUserRow.Id).Take(100);
         }
 
