@@ -94,19 +94,10 @@ namespace Linkedin.Web
                     objRequest.Status = (short)ScheduleStatus.Submit;
                     objRequest.CreateDateTime = DateTime.Now;
                     objRequest.UpdateDateTime = DateTime.Now;
-                    _requestService.Insert(objRequest);
-
+                    _requestService.Insert(objRequest);   
                 }
-
-                
-
-
             }
 
-
-
-        
-       
             var count = Interlocked.Increment(ref executionCount);
 
             _logger.LogInformation(
