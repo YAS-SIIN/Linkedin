@@ -49,22 +49,23 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).FirstOrDefault();
         
-            return _activityService.GetAll().Where(a => a.UserId == RecivedUserRow.Id);
+            return _activityService.GetAll().ToList().Where(a => a.UserId == RecivedUserRow.Id).ToList();
         }
 
-        [HttpPut]
-        public bool ChangeStatusByUser(string UserId)
+        [HttpPut, Route("[action]")]
+        public bool ChangeStatusByUser(string UserId, short Status)
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
-            IEnumerable<Activity> lstActivities = _activityService.GetAll().Where(a => a.UserId == RecivedUserRow.Id);
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).FirstOrDefault();
+            List<Activity> lstActivities = _activityService.GetAll().ToList().Where(a => a.UserId == RecivedUserRow.Id).ToList();
 
             foreach (Activity item in lstActivities)
             {
                 item.UpdateDateTime = DateTime.Now;
+                item.Status = Status;
                 _activityService.Update(item);
             }
                                                         
@@ -78,6 +79,8 @@ namespace Linkedin.Web.Controllers
 
             Activity.Status = (short)UserStatus.Submit;
             Activity.CreateDateTime = DateTime.Now;
+            Activity.UpdateDateTime = DateTime.Now;
+            Activity.Id = 5;
             return _activityService.Insert(Activity);
         }
            

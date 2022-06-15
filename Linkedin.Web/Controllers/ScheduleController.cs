@@ -79,17 +79,17 @@ namespace Linkedin.Web.Controllers
             User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ToList().ElementAt(0);
             RecivedUserRow.Schedule = _scheduleservice.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status == (short)ScheduleStatus.Submit).ToList();
             RecivedUserRow.Activity = _activityService.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status== (short)ActivityStatus.Submit).ToList();
-            RecivedUserRow.Request = _requestService.GetAll().Where(x => x.UserId == RecivedUserRow.Id).ToList().ElementAt(0) ;
+            RecivedUserRow.Request = _requestService.GetAll().Where(x => x.UserId == RecivedUserRow.Id).ToList().FirstOrDefault() ;
             return RecivedUserRow;
         }
 
-        [HttpPut]
+        [HttpPut, Route("[action]")]
         public Schedule ChangeStatusByUser(string UserId, short Status)
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ElementAt(0);
-            Schedule RecivedRow = _scheduleservice.GetAll().Where(a => a.UserId == RecivedUserRow.Id).ElementAt(0);
+            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).FirstOrDefault();
+            Schedule RecivedRow = _scheduleservice.GetAll().Where(a => a.UserId == RecivedUserRow.Id).FirstOrDefault();
             RecivedRow.Status = Status;
             RecivedRow.UpdateDateTime = DateTime.Now;
             return _scheduleservice.Update(RecivedRow);

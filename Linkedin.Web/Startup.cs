@@ -18,7 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
- 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +54,11 @@ namespace Linkedin.Web
                         .AllowAnyHeader()
                         .WithExposedHeaders("X-Pagination"));
             });
+
+            services.AddControllersWithViews()
+.AddNewtonsoftJson(options =>
+options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
             services.AddDbContext<MyDataBase>(options => options.UseSqlServer(Configuration["ConnectionStrings:DatabaseConnection"]));
 
