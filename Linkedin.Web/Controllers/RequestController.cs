@@ -42,7 +42,7 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            return _requestService.GetAll().Where(a => a.ExpireDateTime > DateTime.Now);
+            return _requestService.GetAll(a => a.ExpireDateTime > DateTime.Now);
         }
 
         [HttpGet, Route("[action]")]
@@ -50,7 +50,7 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            return _requestService.GetAll().Where(a=>a.Status== (short)RequestStatus.Submit);
+            return _requestService.GetAll(a=>a.Status== (short)RequestStatus.Submit);
         }
 
         [HttpPut, Route("[action]")]
@@ -58,8 +58,8 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).FirstOrDefault();
-            Request RecivedRow = _requestService.GetAll().Where(a=>a.UserId== RecivedUserRow.Id).FirstOrDefault();
+            User RecivedUserRow = _userservice.GetByUserId(UserId);
+            Request RecivedRow = _requestService.GetAll(a=>a.UserId== RecivedUserRow.Id).FirstOrDefault();
 
             RecivedRow.UpdateDateTime = DateTime.Now;
             RecivedRow.Status = Status;

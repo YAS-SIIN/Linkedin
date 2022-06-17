@@ -42,7 +42,7 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            return _userservice.GetAll().ToList().Where(x => x.Status == (short)UserStatus.InProgress).
+            return _userservice.GetAll(x => x.Status == (short)UserStatus.InProgress).
                 Select(x => new { x, Schedule = _scheduleservice.GetAll().Where(a => a.UserId == x.Id && a.Status == (short)ScheduleStatus.Submit).ToList(),
                     Activity = _activityService.GetAll().Where(b => b.UserId == x.Id && b.Status == (short)ActivityStatus.Submit).ToList(),
                     Request = _requestService.GetAll().Where(x => x.UserId == x.Id).ToList()
@@ -62,9 +62,9 @@ namespace Linkedin.Web.Controllers
                      select new
                      {
                          a,
-                         Schedule = _scheduleservice.GetAll().Where(x => x.UserId == a.Id && x.Status == (short)ScheduleStatus.Submit).ToList(),
-                         Activity = _activityService.GetAll().Where(x => x.UserId == a.Id && x.Status == (short)ActivityStatus.Submit).ToList(),
-                         Request = _requestService.GetAll().Where(x => x.UserId == a.Id).ToList()
+                         Schedule = _scheduleservice.GetAll(x => x.UserId == a.Id && x.Status == (short)ScheduleStatus.Submit).ToList(),
+                         Activity = _activityService.GetAll(x => x.UserId == a.Id && x.Status == (short)ActivityStatus.Submit).ToList(),
+                         Request = _requestService.GetAll(x => x.UserId == a.Id).ToList()
                      };
 
                      
@@ -76,10 +76,10 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).ToList().ElementAt(0);
-            RecivedUserRow.Schedule = _scheduleservice.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status == (short)ScheduleStatus.Submit).ToList();
-            RecivedUserRow.Activity = _activityService.GetAll().Where(x => x.UserId == RecivedUserRow.Id && x.Status== (short)ActivityStatus.Submit).ToList();
-            RecivedUserRow.Request = _requestService.GetAll().Where(x => x.UserId == RecivedUserRow.Id).ToList().FirstOrDefault() ;
+            User RecivedUserRow = _userservice.GetAll(a => a.ExternalUserId == UserId).ToList().ElementAt(0);
+            RecivedUserRow.Schedule = _scheduleservice.GetAll(x => x.UserId == RecivedUserRow.Id && x.Status == (short)ScheduleStatus.Submit).ToList();
+            RecivedUserRow.Activity = _activityService.GetAll(x => x.UserId == RecivedUserRow.Id && x.Status== (short)ActivityStatus.Submit).ToList();
+            RecivedUserRow.Request = _requestService.GetAll(x => x.UserId == RecivedUserRow.Id).ToList().FirstOrDefault() ;
             return RecivedUserRow;
         }
 
@@ -88,8 +88,8 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).FirstOrDefault();
-            Schedule RecivedRow = _scheduleservice.GetAll().Where(a => a.UserId == RecivedUserRow.Id).FirstOrDefault();
+            User RecivedUserRow = _userservice.GetByUserId(UserId);
+            Schedule RecivedRow = _scheduleservice.GetAll(a => a.UserId == RecivedUserRow.Id).FirstOrDefault();
             RecivedRow.Status = Status;
             RecivedRow.UpdateDateTime = DateTime.Now;
             return _scheduleservice.Update(RecivedRow);

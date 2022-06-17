@@ -4,6 +4,7 @@ using Linkedin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,11 @@ namespace Linkedin.Service.Request
         public IQueryable<Models.Request> GetAll()
         {
             return _uw.GetRepository<Models.Request>().GetAll();
+        }
+
+        public IQueryable<Models.Request> GetAll(Expression<Func<Models.Request, bool>> predicate)
+        {
+            return _uw.GetRepository<Models.Request>().GetAll(predicate);
         }
 
         public Models.Request GetById(int id)

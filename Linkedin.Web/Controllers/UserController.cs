@@ -40,7 +40,8 @@ namespace Linkedin.Web.Controllers
 
             User.Status = (short)UserStatus.Submit;
             User.CreateDateTime = DateTime.Now;
-            return _userservice.Insert(User);
+             _userservice.Insert(User);     
+            return User;
         }
                     
         [HttpDelete]
@@ -48,7 +49,7 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).FirstOrDefault();
+            User RecivedUserRow = _userservice.GetByUserId(UserId);
             RecivedUserRow.Status = (short)UserStatus.Deleted;
             return _userservice.Update(RecivedUserRow);
         }

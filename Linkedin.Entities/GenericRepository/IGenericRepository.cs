@@ -24,6 +24,8 @@ namespace Linkedin.Entities.GenericRepository
 
         void Update(T entity);
 
+        void UpdateRange(List<T> entity);
+
         void Delete(T entity);   
 
         void DeleteRange(List<T> entity);

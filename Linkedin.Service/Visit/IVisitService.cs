@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,9 +14,8 @@ namespace Linkedin.Service.Visit
     {
 
         IQueryable<Models.Visit> GetAll();
-
-        Models.Visit GetById(int id);
-
+        IQueryable<Models.Visit> GetAll(Expression<Func<Models.Visit, bool>> predicate);
+        Models.Visit GetById(int id);      
         Models.Visit Insert(Models.Visit ObjVisit);
         Models.Visit Update(Models.Visit ObjVisit);
         Models.Visit Delete(Models.Visit ObjVisit);

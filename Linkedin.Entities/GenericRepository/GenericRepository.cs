@@ -59,7 +59,13 @@ namespace Linkedin.Entities.GenericRepository
             _dbSet.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
         }
-    
+
+        public virtual void UpdateRange(List<T> entity)
+        {
+            _dbSet.AttachRange(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+        }
+
 
         public virtual void Delete(T entity)
         {

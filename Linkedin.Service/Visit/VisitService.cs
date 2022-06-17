@@ -4,6 +4,7 @@ using Linkedin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,7 +23,10 @@ namespace Linkedin.Service.Visit
         {
             return _uw.GetRepository<Models.Visit>().GetAll();
         }
-
+        public IQueryable<Models.Visit> GetAll(Expression<Func<Models.Visit, bool>> predicate)
+        {
+            return _uw.GetRepository<Models.Visit>().GetAll(predicate);
+        }
         public Models.Visit GetById(int id)
         {
             return _uw.GetRepository<Models.Visit>().GetById(id);

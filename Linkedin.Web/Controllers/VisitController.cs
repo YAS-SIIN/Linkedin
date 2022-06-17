@@ -27,7 +27,7 @@ namespace Linkedin.Web.Controllers
         private readonly IRequestService _requestService;
         public IConfiguration Configuration { get; }
 
-        public VisitController(ILogger<VisitController> logger, IVisitService visitservice, 
+        public VisitController(ILogger<VisitController> logger, IVisitService visitservice,
             IRequestService requestService, IUserService userservice, IConfiguration configuration)
         {
             _logger = logger;
@@ -50,35 +50,19 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).FirstOrDefault();
-            return _visitservice.GetAll().Where(x => x.UserId == RecivedUserRow.Id).Take(100);
+            User RecivedUserRow = _userservice.GetByUserId(UserId);
+            return _visitservice.GetAll(x => x.UserId == RecivedUserRow.Id).Take(100);
         }
 
         [HttpPost]
-        public Visit Post(string UserId)
+        public bool Post(string UserId)
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
             int countVisitToRequest = int.Parse(Configuration["CountVisitToRequest"]);
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).FirstOrDefault();
-
-            RecivedUserRow.VisitCount += 1;  
-            _userservice.Update(RecivedUserRow);
-
-            if (RecivedUserRow.VisitCount >= countVisitToRequest)
-            {
-                Request RecivedRequestRow = _requestService.GetAll().Where(a => a.UserId == RecivedUserRow.Id).FirstOrDefault();
-                RecivedRequestRow.Status = (short)RequestStatus.Scheduled;
-                RecivedRequestRow.UpdateDateTime = DateTime.Now;
-                _requestService.Update(RecivedRequestRow);      
-            }
-
-            Visit ObjVisit = new Visit();
-            ObjVisit.CreateDateTime = DateTime.Now;       
-            ObjVisit.UserId = RecivedUserRow.Id;
-
-            return _visitservice.Insert(ObjVisit);
+            return _userservice.VisitUser(UserId, countVisitToRequest);
+                 
         }
 
      

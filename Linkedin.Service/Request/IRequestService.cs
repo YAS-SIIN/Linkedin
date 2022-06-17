@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,9 +14,8 @@ namespace Linkedin.Service.Request
     {
 
         IQueryable<Models.Request> GetAll();
-
+        IQueryable<Models.Request> GetAll(Expression<Func<Models.Request, bool>> predicate);
         Models.Request GetById(int id);
-
         Models.Request Insert(Models.Request ObjRequest);
         Models.Request Update(Models.Request ObjRequest);
         Models.Request Delete(Models.Request ObjRequest);

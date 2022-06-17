@@ -4,9 +4,11 @@ using Linkedin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
+using static Linkedin.Common.TypeEnum;
 
 namespace Linkedin.Service.Schedule
 {
@@ -21,6 +23,11 @@ namespace Linkedin.Service.Schedule
         public IQueryable<Models.Schedule> GetAll()
         {
             return _uw.GetRepository< Linkedin.Models. Schedule >().GetAll();
+        }
+
+        public IQueryable<Models.Schedule> GetAll(Expression<Func<Models.Schedule, bool>> predicate)
+        {
+            return _uw.GetRepository<Models.Schedule>().GetAll(predicate);
         }
 
         public Models.Schedule GetById(int id)
@@ -49,6 +56,42 @@ namespace Linkedin.Service.Schedule
             _uw.GetRepository<Models.Schedule>().Delete(ObjSchedule);
             _uw.SaveChanges();
             return ObjSchedule;
+        }  
+        
+        public void ScheduleUsers(List<Models.User> ObjUsers)
+        {
+            int UserId = ObjUsers.ToList().FirstOrDefault().Id;
+            List<Models.Schedule> ObjLstSchedule = new List<Models.Schedule>();
+            List<Models.User> ObjLstUser = new List<Models.User>();
+            List<Models.Request> ObjLstRequest = new List<Models.Request>();
+            foreach (var item in ObjUsers)
+            {
+                Models.Schedule objSchedule = new Models.Schedule();
+                
+                objSchedule.UserId = item.Id;
+                objSchedule.Status = (short)ScheduleStatus.Submit;
+                objSchedule.CreateDateTime = DateTime.Now;
+                objSchedule.UpdateDateTime = DateTime.Now;
+
+                _uw.GetRepository<Models.Schedule>().Add(objSchedule);
+
+
+                item.Status = (short)UserStatus.InProgress;
+                _uw.GetRepository<Models.User>().Update(item);
+
+                Models.Request objRequest = new Models.Request();
+
+                objRequest.UserId = item.Id;
+                objRequest.Status = (short)ScheduleStatus.Submit;
+                objRequest.CreateDateTime = DateTime.Now;
+                objRequest.UpdateDateTime = DateTime.Now;
+                _uw.GetRepository<Models.Request>().Add(objRequest);
+            }                                         
+
+     
+            _uw.SaveChanges();
+
+
         }
     }
 }

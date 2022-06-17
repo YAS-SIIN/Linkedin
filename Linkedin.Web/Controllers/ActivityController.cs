@@ -49,9 +49,9 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).FirstOrDefault();
-        
-            return _activityService.GetAll().ToList().Where(a => a.UserId == RecivedUserRow.Id).ToList();
+            User RecivedUserRow = _userservice.GetByUserId(UserId);
+
+            return _activityService.GetAll(a => a.UserId == RecivedUserRow.Id).ToList();
         }
 
         [HttpPut, Route("[action]")]
@@ -59,16 +59,17 @@ namespace Linkedin.Web.Controllers
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
-            User RecivedUserRow = _userservice.GetAll().Where(a => a.ExternalUserId == UserId).FirstOrDefault();
-            List<Activity> lstActivities = _activityService.GetAll().ToList().Where(a => a.UserId == RecivedUserRow.Id).ToList();
+            User RecivedUserRow = _userservice.GetByUserId(UserId);
+            List<Activity> lstActivities = _activityService.GetAll(a => a.UserId == RecivedUserRow.Id).ToList();
 
             foreach (Activity item in lstActivities)
             {
                 item.UpdateDateTime = DateTime.Now;
                 item.Status = Status;
-                _activityService.Update(item);
             }
-                                                        
+
+            _activityService.UpdateList(lstActivities);
+
             return true;
         }
 
@@ -80,7 +81,7 @@ namespace Linkedin.Web.Controllers
             Activity.Status = (short)UserStatus.Submit;
             Activity.CreateDateTime = DateTime.Now;
             Activity.UpdateDateTime = DateTime.Now;
-            Activity.Id = 5;
+            //Activity.Id = 5;
             return _activityService.Insert(Activity);
         }
            
