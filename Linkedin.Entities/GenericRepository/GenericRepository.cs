@@ -24,6 +24,11 @@ namespace Linkedin.Entities.GenericRepository
             _dbSet = context.Set<T>();
         }
 
+        public  T ExistData()
+        {
+            return _dbSet.FirstOrDefault();
+        }
+
         public IQueryable<T> GetAll()
         {
             return _dbSet;

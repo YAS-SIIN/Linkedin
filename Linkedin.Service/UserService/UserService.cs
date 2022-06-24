@@ -12,7 +12,7 @@ using static Linkedin.Common.TypeEnum;
 
 namespace Linkedin.Service.UserService
 {
-  public class UserService:IUserService
+  public class UserService : IUserService
     { 
         private readonly IUnitOfWork _uw;
         public UserService(IUnitOfWork uw)
@@ -59,6 +59,14 @@ namespace Linkedin.Service.UserService
             return ObjUser;
         }
 
+        public Models.Activity InsertActivity(Models.Activity ObjActivity)
+        {
+            var maxId = _uw.GetRepository<Models.Activity>().GetAll().Select(a=>a.Id).Max() + 1;
+            ObjActivity.Id = 25;
+            _uw.GetRepository<Models.Activity>().Add(ObjActivity);
+            _uw.SaveChanges();
+            return ObjActivity;
+        }
 
         public bool VisitUser(string UserId, int countVisitToRequest)
         {

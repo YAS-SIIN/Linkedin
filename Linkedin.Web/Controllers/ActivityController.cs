@@ -40,7 +40,8 @@ namespace Linkedin.Web.Controllers
         public Activity GetById(int Id)
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
-
+               var a =_activityService.GetById(Id);
+           
             return _activityService.GetById(Id);
         }
 
@@ -81,8 +82,9 @@ namespace Linkedin.Web.Controllers
             Activity.Status = (short)UserStatus.Submit;
             Activity.CreateDateTime = DateTime.Now;
             Activity.UpdateDateTime = DateTime.Now;
+
             //Activity.Id = 5;
-            return _activityService.Insert(Activity);
+            return _userservice.InsertActivity(Activity);
         }
            
     }

@@ -9,7 +9,7 @@ namespace Linkedin.Entities.GenericRepository
 {
     public interface IGenericRepository<T> where T : class
     {
-  
+        T ExistData();
         IQueryable<T> GetAll();
                 
         IQueryable<T> GetAll(Expression<Func<T, bool>> predicate);

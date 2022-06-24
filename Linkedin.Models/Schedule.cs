@@ -9,8 +9,7 @@ namespace Linkedin.Models
 {
     public class  Schedule : BaseEntity<int>
     {
-                                             
-
+                
         [Required]
         public DateTime UpdateDateTime { get; set; }
          

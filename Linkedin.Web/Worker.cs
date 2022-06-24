@@ -56,6 +56,7 @@ namespace Linkedin.Web
         {
             int countUserRow = int.Parse(Configuration["CountUserRow"]);
 
+            
             var Qu2 = from a in _userservice.GetAll().ToList()
                       join b in _scheduleservice.GetAll()
                       on a.Id equals b.UserId

@@ -8,10 +8,7 @@ using System.Threading.Tasks;
 namespace Linkedin.Models
 {
     public class Visit : BaseEntity<int>
-    {
-
-                                                  
-
+    {             
         [Required]
         public int UserId { get; set; }
 

@@ -64,20 +64,19 @@ options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoop
 
             //services.AddTransient<ISettingsService, SettingsService>();
             //services.AddSingleton<IConfiguration>(Configuration);
-
-            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+                                                                           
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IGenericRepository<Activity>, GenericRepository<Activity>>();
             services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
             services.AddScoped<IGenericRepository<Request>, GenericRepository<Request>>();
             services.AddScoped<IGenericRepository<Schedule>, GenericRepository<Schedule>>();
             services.AddScoped<IGenericRepository<Visit>, GenericRepository<Visit>>();
+            services.AddScoped<IGenericRepository<Activity>, GenericRepository<Activity>>();
 
-            services.AddScoped<IActivityService, ActivityService>();
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<IRequestService, RequestService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IVisitService, VisitService>();
+            services.AddScoped<IActivityService, ActivityService>();
 
             services.AddHostedService<Worker>();
             services.AddMemoryCache();

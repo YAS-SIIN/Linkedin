@@ -14,7 +14,7 @@ namespace Linkedin.Models
 
     public abstract class BaseEntity<TKey> : IEntity
     { 
-        [Required]
+          [Key]
         public TKey Id { get; set; }
 
         [Required]

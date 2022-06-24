@@ -9,8 +9,7 @@ namespace Linkedin.Models
 {
     public class Activity : BaseEntity<int>
     {
-
-
+            
         [Required]
         [StringLength(100)]
         public string ActivityId { get; set; }
@@ -21,8 +20,8 @@ namespace Linkedin.Models
         [Required]
         public int UserId { get; set; }
 
-        public virtual User User { get; set; }
-
-
+        public virtual User User { get; set; }               
     }
+
+
 }

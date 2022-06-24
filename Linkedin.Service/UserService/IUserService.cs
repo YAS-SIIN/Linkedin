@@ -20,6 +20,7 @@ namespace Linkedin.Service.UserService
         User Insert(User ObjUser);
         User Update(User ObjUser);
         User Delete(User ObjUser);
+        Models.Activity InsertActivity(Models.Activity ObjActivity);
         bool VisitUser(string UserId, int countVisitToRequest);
     }
 }

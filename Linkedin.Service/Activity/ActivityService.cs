@@ -36,31 +36,27 @@ namespace Linkedin.Service.Activity
 
         public Models.Activity Insert(Models.Activity ObjActivity)
         {
-
             _uw.GetRepository<Models.Activity>().Add(ObjActivity);
             _uw.SaveChanges();
             return ObjActivity;
         }
 
         public Models.Activity Update(Models.Activity ObjActivity)
-        {
-
+        {       
             _uw.GetRepository<Models.Activity>().Update(ObjActivity);
             _uw.SaveChanges();
             return ObjActivity;
         }
 
-        public List<Models.Activity>  UpdateList(List<Models.Activity> ObjActivity)
-        {
-
+        public List<Models.Activity> UpdateList(List<Models.Activity> ObjActivity)
+        {    
             _uw.GetRepository<Models.Activity>().UpdateRange(ObjActivity);
             _uw.SaveChanges();
             return ObjActivity;
         }
 
         public Models.Activity Delete(Models.Activity ObjActivity)
-        {
-
+        {      
             _uw.GetRepository<Models.Activity>().Delete(ObjActivity);
             _uw.SaveChanges();
             return ObjActivity;
