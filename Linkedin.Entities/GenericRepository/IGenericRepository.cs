@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linkedin.Entities.GenericRepository
 {
@@ -11,7 +9,7 @@ namespace Linkedin.Entities.GenericRepository
     {
         T ExistData();
         IQueryable<T> GetAll();
-                
+
         IQueryable<T> GetAll(Expression<Func<T, bool>> predicate);
 
         T GetById(object id);
@@ -26,9 +24,9 @@ namespace Linkedin.Entities.GenericRepository
 
         void UpdateRange(List<T> entity);
 
-        void Delete(T entity);   
+        void Delete(T entity);
 
         void DeleteRange(List<T> entity);
-          
+
     }
 }

@@ -1,15 +1,13 @@
-﻿using Linkedin.Models;
-
+﻿
+using Linkedin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace Linkedin.Service.Activity
-{ 
+{
     public interface IActivityService
     {
 
@@ -21,7 +19,7 @@ namespace Linkedin.Service.Activity
         Models.Activity Insert(Models.Activity ObjActivity);
         Models.Activity Update(Models.Activity ObjActivity);
         List<Models.Activity> UpdateList(List<Models.Activity> ObjActivity);
-        Models.Activity Delete(Models.Activity ObjActivity);     
-
+        Models.Activity Delete(Models.Activity ObjActivity);
+        Models.Activity InsertNewActivity(User ObjUser, String ActivityId);
     }
 }

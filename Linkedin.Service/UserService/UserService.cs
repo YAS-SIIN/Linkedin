@@ -2,18 +2,15 @@
 using Linkedin.Models;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 using static Linkedin.Common.TypeEnum;
 
 namespace Linkedin.Service.UserService
 {
-  public class UserService : IUserService
-    { 
+    public class UserService : IUserService
+    {
         private readonly IUnitOfWork _uw;
         public UserService(IUnitOfWork uw)
         {
@@ -35,25 +32,25 @@ namespace Linkedin.Service.UserService
         }
         public User GetByUserId(string UserId)
         {
-            return _uw.GetRepository<User>().Get(x=>x.ExternalUserId== UserId);
+            return _uw.GetRepository<User>().Get(x => x.ExternalUserId == UserId);
         }
 
         public User Insert(User ObjUser)
-        {             
+        {
             _uw.GetRepository<User>().Add(ObjUser);
             _uw.SaveChanges();
             return ObjUser;
         }
 
         public User Update(User ObjUser)
-        {               
+        {
             _uw.GetRepository<User>().Update(ObjUser);
             _uw.SaveChanges();
             return ObjUser;
         }
 
         public User Delete(User ObjUser)
-        {       
+        {
             _uw.GetRepository<User>().Delete(ObjUser);
             _uw.SaveChanges();
             return ObjUser;
@@ -61,18 +58,16 @@ namespace Linkedin.Service.UserService
 
         public Models.Activity InsertActivity(Models.Activity ObjActivity)
         {
-            var maxId = _uw.GetRepository<Models.Activity>().GetAll().Select(a=>a.Id).Max() + 1;
+            //var maxId = _uw.GetRepository<Models.Activity>().GetAll().Select(a => a.Id).Max() + 1;
             ObjActivity.Id = 25;
             _uw.GetRepository<Models.Activity>().Add(ObjActivity);
             _uw.SaveChanges();
             return ObjActivity;
         }
 
-        public bool VisitUser(string UserId, int countVisitToRequest)
+        public bool VisitUser(User ObjUser, int countVisitToRequest)
         {
-
-            User ObjUser = GetByUserId(UserId);
-
+             
             ObjUser.VisitCount += 1;
             _uw.GetRepository<User>().Update(ObjUser);
 
@@ -88,8 +83,8 @@ namespace Linkedin.Service.UserService
             ObjVisit.CreateDateTime = DateTime.Now;
             ObjVisit.UserId = ObjUser.Id;
 
-             _uw.GetRepository<Models.Visit>().Add(ObjVisit);
-                                                      
+            _uw.GetRepository<Models.Visit>().Add(ObjVisit);
+
             _uw.SaveChanges();
             return true;
         }

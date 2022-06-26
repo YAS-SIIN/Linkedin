@@ -1,15 +1,12 @@
-﻿using Linkedin.Models;         
+﻿using Linkedin.Models;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linkedin.Service.UserService
 {
-   public interface IUserService 
+    public interface IUserService
     {
         IQueryable<User> GetAll();
         IQueryable<Models.User> GetAll(Expression<Func<Models.User, bool>> predicate);
@@ -21,6 +18,6 @@ namespace Linkedin.Service.UserService
         User Update(User ObjUser);
         User Delete(User ObjUser);
         Models.Activity InsertActivity(Models.Activity ObjActivity);
-        bool VisitUser(string UserId, int countVisitToRequest);
+        bool VisitUser(User UserId, int countVisitToRequest);
     }
 }

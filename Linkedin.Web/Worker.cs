@@ -1,7 +1,4 @@
-﻿using Linkedin.Entities.Context;
-using Linkedin.Entities.UnitOfWork;
-using Linkedin.Models;
-using Linkedin.Service.Request;
+﻿using Linkedin.Entities.UnitOfWork;
 using Linkedin.Service.Schedule;
 using Linkedin.Service.UserService;
 
@@ -21,24 +18,24 @@ using static Linkedin.Common.TypeEnum;
 namespace Linkedin.Web
 {
     public class Worker : IHostedService, IDisposable
-    {                                    
+    {
         public IConfiguration Configuration { get; }
         private int executionCount = 0;
         private readonly ILogger<Worker> _logger;
         private Timer? _timer = null;
         private readonly IUserService _userservice;
-        private readonly IScheduleService _scheduleservice;        
-                                                   
+        private readonly IScheduleService _scheduleservice;
+
         private readonly IUnitOfWork _unitOfWork;
 
-        public Worker(ILogger<Worker> logger, IServiceScopeFactory serviceProvider, 
+        public Worker(ILogger<Worker> logger, IServiceScopeFactory serviceProvider,
             IConfiguration configuration)
         {
             _logger = logger;
-           var a= serviceProvider.CreateScope();                                
-            _unitOfWork = a.ServiceProvider.GetRequiredService<IUnitOfWork>();       
+            var a = serviceProvider.CreateScope();
+            _unitOfWork = a.ServiceProvider.GetRequiredService<IUnitOfWork>();
             _userservice = a.ServiceProvider.GetRequiredService<IUserService>();
-            _scheduleservice = a.ServiceProvider.GetRequiredService<IScheduleService>();   
+            _scheduleservice = a.ServiceProvider.GetRequiredService<IScheduleService>();
             Configuration = configuration;
         }
 
@@ -56,7 +53,7 @@ namespace Linkedin.Web
         {
             int countUserRow = int.Parse(Configuration["CountUserRow"]);
 
-            
+
             var Qu2 = from a in _userservice.GetAll().ToList()
                       join b in _scheduleservice.GetAll()
                       on a.Id equals b.UserId

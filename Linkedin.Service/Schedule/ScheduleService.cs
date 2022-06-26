@@ -1,20 +1,17 @@
 ﻿using Linkedin.Entities.UnitOfWork;
-using Linkedin.Models;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 using static Linkedin.Common.TypeEnum;
 
 namespace Linkedin.Service.Schedule
 {
-  
+
     public class ScheduleService : IScheduleService
-    { 
+    {
         private readonly IUnitOfWork _uw;
         public ScheduleService(IUnitOfWork uw)
         {
@@ -22,7 +19,7 @@ namespace Linkedin.Service.Schedule
         }
         public IQueryable<Models.Schedule> GetAll()
         {
-            return _uw.GetRepository< Linkedin.Models. Schedule >().GetAll();
+            return _uw.GetRepository<Linkedin.Models.Schedule>().GetAll();
         }
 
         public IQueryable<Models.Schedule> GetAll(Expression<Func<Models.Schedule, bool>> predicate)
@@ -52,22 +49,22 @@ namespace Linkedin.Service.Schedule
         }
 
         public Models.Schedule Delete(Models.Schedule ObjSchedule)
-        { 
+        {
             _uw.GetRepository<Models.Schedule>().Delete(ObjSchedule);
             _uw.SaveChanges();
             return ObjSchedule;
-        }  
-        
+        }
+
         public void ScheduleUsers(List<Models.User> ObjUsers)
         {
-            int UserId = ObjUsers.ToList().FirstOrDefault().Id;
+           
             List<Models.Schedule> ObjLstSchedule = new List<Models.Schedule>();
             List<Models.User> ObjLstUser = new List<Models.User>();
             List<Models.Request> ObjLstRequest = new List<Models.Request>();
             foreach (var item in ObjUsers)
             {
                 Models.Schedule objSchedule = new Models.Schedule();
-                
+
                 objSchedule.UserId = item.Id;
                 objSchedule.Status = (short)ScheduleStatus.Submit;
                 objSchedule.CreateDateTime = DateTime.Now;
@@ -86,9 +83,9 @@ namespace Linkedin.Service.Schedule
                 objRequest.CreateDateTime = DateTime.Now;
                 objRequest.UpdateDateTime = DateTime.Now;
                 _uw.GetRepository<Models.Request>().Add(objRequest);
-            }                                         
+            }
 
-     
+
             _uw.SaveChanges();
 
 

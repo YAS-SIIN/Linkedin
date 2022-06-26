@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linkedin.Models
 {
     public class User : BaseEntity<int>
     {
-         
-        [Required] 
+
+        [Required]
         [StringLength(100)]
         public string ExternalUserId { get; set; }
-                            
-        [Required] 
+
+        [Required]
         public long VisitCount { get; set; }
 
         public virtual ICollection<Activity> Activity { get; set; }

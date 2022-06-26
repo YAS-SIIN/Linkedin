@@ -1,20 +1,16 @@
-﻿using System; 
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿
 using Linkedin.Models;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Linkedin.Entities.Context
 {
 
     public class MyDataBase : DbContext
     {
-      
+
         public MyDataBase(DbContextOptions<MyDataBase> options) : base(options)
-        { 
+        {
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Activity> Activities { get; set; }

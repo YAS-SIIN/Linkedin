@@ -1,19 +1,15 @@
 ﻿using Linkedin.Entities.UnitOfWork;
-using Linkedin.Models;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace Linkedin.Service.Visit
 {
-  
+
     public class VisitService : IVisitService
-    { 
+    {
         private readonly IUnitOfWork _uw;
         public VisitService(IUnitOfWork uw)
         {

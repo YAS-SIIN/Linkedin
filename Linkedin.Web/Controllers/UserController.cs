@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Linkedin.Models;
+using Linkedin.Service.UserService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Linkedin.Models;
-using Linkedin.Service.UserService;
-using System.Net.Http;
 using static Linkedin.Common.TypeEnum;
 
 namespace Linkedin.Web.Controllers
@@ -17,17 +12,17 @@ namespace Linkedin.Web.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-       private readonly ILogger<UserController> _logger;
-        private readonly IUserService _userservice;          
+        private readonly ILogger<UserController> _logger;
+        private readonly IUserService _userservice;
         public UserController(ILogger<UserController> logger, IUserService userservice)
         {
             _logger = logger;
-            _userservice = userservice;                                                       
+            _userservice = userservice;
         }
 
         [HttpGet]
         public IEnumerable<User> Get()
-        {                                                                                      
+        {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
             return _userservice.GetAll();
@@ -40,10 +35,10 @@ namespace Linkedin.Web.Controllers
 
             User.Status = (short)UserStatus.Submit;
             User.CreateDateTime = DateTime.Now;
-             _userservice.Insert(User);     
+            _userservice.Insert(User);
             return User;
         }
-                    
+
         [HttpDelete]
         public User DeleteByUser(string UserId)
         {
@@ -54,6 +49,6 @@ namespace Linkedin.Web.Controllers
             return _userservice.Update(RecivedUserRow);
         }
 
-      
+
     }
 }

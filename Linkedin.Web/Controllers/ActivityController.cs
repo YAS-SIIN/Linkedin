@@ -1,15 +1,12 @@
 ﻿using Linkedin.Models;
 using Linkedin.Service.Activity;
 using Linkedin.Service.UserService;
-
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using static Linkedin.Common.TypeEnum;
 
@@ -40,8 +37,8 @@ namespace Linkedin.Web.Controllers
         public Activity GetById(int Id)
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
-               var a =_activityService.GetById(Id);
-           
+            var a = _activityService.GetById(Id);
+
             return _activityService.GetById(Id);
         }
 
@@ -75,17 +72,15 @@ namespace Linkedin.Web.Controllers
         }
 
         [HttpPost]
-        public Activity Post([FromBody] Activity Activity)
+        public Activity Post(string UserId, string ActivityId)
         {
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
+            User RecivedUserRow = _userservice.GetByUserId(UserId);
 
-            Activity.Status = (short)UserStatus.Submit;
-            Activity.CreateDateTime = DateTime.Now;
-            Activity.UpdateDateTime = DateTime.Now;
 
             //Activity.Id = 5;
-            return _userservice.InsertActivity(Activity);
+            return _activityService.InsertNewActivity(RecivedUserRow, ActivityId); 
         }
-           
+
     }
 }

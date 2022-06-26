@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Linkedin.Models
 {
     public class Visit : BaseEntity<int>
-    {             
+    {
         [Required]
         public int UserId { get; set; }
 

@@ -2,18 +2,11 @@
 using Linkedin.Service.Request;
 using Linkedin.Service.UserService;
 using Linkedin.Service.Visit;
-
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
-using static Linkedin.Common.TypeEnum;
 
 namespace Linkedin.Web.Controllers
 {
@@ -60,11 +53,11 @@ namespace Linkedin.Web.Controllers
             _logger.LogInformation($"ControllerName: {ControllerContext.RouteData.Values["action"] } - ActionName: {ControllerContext.RouteData.Values["action"] }");
 
             int countVisitToRequest = int.Parse(Configuration["CountVisitToRequest"]);
+            User RecivedUserRow = _userservice.GetByUserId(UserId);
+            return _userservice.VisitUser(RecivedUserRow, countVisitToRequest);
 
-            return _userservice.VisitUser(UserId, countVisitToRequest);
-                 
         }
 
-     
+
     }
 }

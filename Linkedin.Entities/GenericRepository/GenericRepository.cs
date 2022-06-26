@@ -1,17 +1,15 @@
 ﻿using Linkedin.Entities.Context;
 
 using Microsoft.EntityFrameworkCore;
- 
+
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linkedin.Entities.GenericRepository
 {
- 
+
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
 
@@ -24,7 +22,7 @@ namespace Linkedin.Entities.GenericRepository
             _dbSet = context.Set<T>();
         }
 
-        public  T ExistData()
+        public T ExistData()
         {
             return _dbSet.FirstOrDefault();
         }
@@ -33,12 +31,12 @@ namespace Linkedin.Entities.GenericRepository
         {
             return _dbSet;
         }
-     
+
         public IQueryable<T> GetAll(Expression<Func<T, bool>> predicate)
         {
             return _dbSet.Where(predicate);
         }
-             
+
         public virtual T GetById(object id)
         {
             return _dbSet.Find(id);
@@ -80,7 +78,7 @@ namespace Linkedin.Entities.GenericRepository
         }
 
         public virtual void DeleteRange(List<T> entity)
-        {        
+        {
             _dbSet.RemoveRange(entity);
         }
 

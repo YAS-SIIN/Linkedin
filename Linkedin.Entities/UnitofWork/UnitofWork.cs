@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks; 
-using Linkedin.Entities.Context;
-using Linkedin.Entities.GenericRepository; 
+﻿using Linkedin.Entities.Context;
+using Linkedin.Entities.GenericRepository;
+using System;
 namespace Linkedin.Entities.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly MyDataBase _context; 
+        private readonly MyDataBase _context;
         private bool disposed = false;
 
         public UnitOfWork(MyDataBase context)
@@ -25,19 +21,19 @@ namespace Linkedin.Entities.UnitOfWork
         {
             return new GenericRepository<T>(_context);
         }
-          
-         
+
+
         public void SaveChanges()
-        { 
+        {
             try
             {
                 _context.SaveChanges();
             }
-            catch  
-            {  
-            } 
+            catch
+            {
+            }
         }
-                
+
         public virtual void Dispose(bool disposing)
         {
             if (!this.disposed)
@@ -55,6 +51,6 @@ namespace Linkedin.Entities.UnitOfWork
             GC.SuppressFinalize(this);
         }
 
-         
+
     }
 }
